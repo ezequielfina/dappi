@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">api</string>
+    <string name="explore_hola">Hola, Ezequiel</string>
+    <string name="explore_main_title">Explorar</string>
+    <string name="dark_mode">dark_mode</string>
+
 </resources>
