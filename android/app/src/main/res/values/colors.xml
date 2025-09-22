@@ -2,4 +2,13 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="colorPrimaryDark">#031f2b</color>
+    <color name="textColorSecondary">#B0B0B0</color>
+    <color name="accentBlue">#4A90E2</color>
+    <color name="statusOpenGreen">#4CAF50</color>
+    <color name="buttonInactiveBackground">#2A2A2A</color>
+    <color name="bottomNavBackground">#1F3A47</color>
+    <color name="iconActive">#5edfff</color>
+    <color name="iconInactive">#B0B0B0</color>
+    <color name="starOrange">#FFC107</color> <!-- Added for RatingBar -->
 </resources>
