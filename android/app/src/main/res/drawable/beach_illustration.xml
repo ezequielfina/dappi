@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="200dp"
+    android:height="200dp"
+    android:viewportWidth="200"
+    android:viewportHeight="200">
+    
+    <!-- Cielo -->
+    <path
+        android:fillColor="#FF87CEEB"
+        android:pathData="M0,0 L200,0 L200,100 L0,100 Z" />
+    
+    <!-- Océano -->
+    <path
+        android:fillColor="#FF4682B4"
+        android:pathData="M0,100 L200,100 L200,200 L0,200 Z" />
+    
+    <!-- Arena -->
+    <path
+        android:fillColor="#FFF4A460"
+        android:pathData="M0,120 L200,120 L200,200 L0,200 Z" />
+    
+    <!-- Palmera izquierda -->
+    <path
+        android:fillColor="#FF8B4513"
+        android:pathData="M30,120 L35,120 L35,180 L30,180 Z" />
+    <path
+        android:fillColor="#FF228B22"
+        android:pathData="M32,120 Q20,100 10,120 Q20,110 32,120" />
+    <path
+        android:fillColor="#FF228B22"
+        android:pathData="M32,120 Q40,100 50,120 Q40,110 32,120" />
+    
+    <!-- Palmera derecha -->
+    <path
+        android:fillColor="#FF8B4513"
+        android:pathData="M165,120 L170,120 L170,180 L165,180 Z" />
+    <path
+        android:fillColor="#FF228B22"
+        android:pathData="M167,120 Q155,100 145,120 Q155,110 167,120" />
+    <path
+        android:fillColor="#FF228B22"
+        android:pathData="M167,120 Q175,100 185,120 Q175,110 167,120" />
+    
+    <!-- Pareja - Cabezas -->
+    <path
+        android:fillColor="#FFDEB887"
+        android:pathData="M92,152 Q100,144 108,152 Q100,160 92,152 Z" />
+    <path
+        android:fillColor="#FFDEB887"
+        android:pathData="M107,152 Q115,144 123,152 Q115,160 107,152 Z" />
+    
+    <!-- Cuerpos -->
+    <path
+        android:fillColor="#FF4169E1"
+        android:pathData="M95,168 L105,168 L105,185 L95,185 Z" />
+    <path
+        android:fillColor="#FFDC143C"
+        android:pathData="M110,168 L120,168 L120,185 L110,185 Z" />
+    
+    <!-- Manos unidas -->
+    <path
+        android:fillColor="#FFDEB887"
+        android:pathData="M105,175 Q110,175 110,180 Q105,180 105,175" />
+</vector>
