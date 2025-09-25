@@ -4,7 +4,10 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,7 +17,7 @@ import ar.edu.uade.api.ui.welcome.WelcomeActivity;
 
 public class OnboardingActivity extends AppCompatActivity {
 
-    private Button btnCountry;
+    private Spinner spinnerCountry;
     private Button btnFavoritePlace;
     private Button btnProfilePhoto;
     private Button btnContinue;
@@ -37,21 +40,42 @@ public class OnboardingActivity extends AppCompatActivity {
     }
 
     private void initializeViews() {
-        btnCountry = findViewById(R.id.btn_country);
+        spinnerCountry = findViewById(R.id.spinner_country);
         btnFavoritePlace = findViewById(R.id.btn_favorite_place);
         btnProfilePhoto = findViewById(R.id.btn_profile_photo);
         btnContinue = findViewById(R.id.btn_continue);
+        
+        setupCountrySpinner();
+    }
+
+    private void setupCountrySpinner() {
+        // Crear adapter para el spinner de países
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
+            this, R.array.countries, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerCountry.setAdapter(adapter);
+        
+        // Listener para cuando se selecciona un país
+        spinnerCountry.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (position > 0) { // No es el primer item "Seleccionar país"
+                    selectedCountry = parent.getItemAtPosition(position).toString();
+                    Toast.makeText(OnboardingActivity.this, 
+                        "País seleccionado: " + selectedCountry, Toast.LENGTH_SHORT).show();
+                } else {
+                    selectedCountry = "";
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                selectedCountry = "";
+            }
+        });
     }
 
     private void setupClickListeners() {
-        // Botón Seleccionar País
-        btnCountry.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showCountrySelection();
-            }
-        });
-
         // Botón Seleccionar Lugar Favorito
         btnFavoritePlace.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -94,16 +118,6 @@ public class OnboardingActivity extends AppCompatActivity {
         }
     }
 
-    private void showCountrySelection() {
-        // Simular selección de país (en una app real, abrirías un dialog o nueva pantalla)
-        String[] countries = {"Argentina", "Brasil", "Chile", "Colombia", "México", "España", "Francia", "Italia"};
-        
-        // Por simplicidad, seleccionamos el primer país
-        selectedCountry = countries[0];
-        btnCountry.setText(selectedCountry);
-        
-        Toast.makeText(this, "País seleccionado: " + selectedCountry, Toast.LENGTH_SHORT).show();
-    }
 
     private void showFavoritePlaceSelection() {
         // Simular selección de lugar favorito

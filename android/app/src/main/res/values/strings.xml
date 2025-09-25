@@ -1,3 +1,26 @@
 <resources>
     <string name="app_name">api</string>
+    
+    <!-- Array de países para el Spinner -->
+    <string-array name="countries">
+        <item>Seleccionar país</item>
+        <item>Argentina</item>
+        <item>Brasil</item>
+        <item>Chile</item>
+        <item>Colombia</item>
+        <item>México</item>
+        <item>Perú</item>
+        <item>Uruguay</item>
+        <item>Venezuela</item>
+        <item>España</item>
+        <item>Estados Unidos</item>
+        <item>Canadá</item>
+        <item>Francia</item>
+        <item>Italia</item>
+        <item>Alemania</item>
+        <item>Reino Unido</item>
+        <item>Japón</item>
+        <item>Australia</item>
+        <item>Otro</item>
+    </string-array>
 </resources>
