@@ -9,7 +9,7 @@ import android.widget.LinearLayout;
 import androidx.appcompat.app.AppCompatActivity;
 
 import ar.edu.uade.api.ui.places.Place;
-import ar.edu.uade.api.ui.user.User;
+import ar.edu.uade.api.ui.user.ProfileActivity;
 import ar.edu.uade.api.R;
 
 public class Explore extends AppCompatActivity {
@@ -26,7 +26,7 @@ public class Explore extends AppCompatActivity {
 
         ImageView profile_photo = findViewById(R.id.avatar);
         card_mount.setOnClickListener(v -> {
-            Intent intent = new Intent(Explore.this, User.class);
+            Intent intent = new Intent(Explore.this, ProfileActivity.class);
             startActivity(intent);
         });
 
