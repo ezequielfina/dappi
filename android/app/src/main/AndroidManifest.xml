@@ -46,7 +46,7 @@
             android:theme="@style/Theme.Api" />
 
         <activity
-            android:name=".ProfileActivity" 
+            android:name=".ui.user.ProfileActivity" 
             android:exported="false"
             android:theme="@style/Theme.Api" />
             
