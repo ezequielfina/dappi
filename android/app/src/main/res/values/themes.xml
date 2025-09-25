@@ -6,4 +6,10 @@
     </style>
 
     <style name="Theme.Api" parent="Base.Theme.Api" />
+
+    <!-- Custom RatingBar style -->
+    <style name="RatingBar" parent="Widget.AppCompat.RatingBar">
+        <item name="colorControlNormal">@color/white</item> <!-- Color for unselected stars -->
+        <item name="colorControlActivated">@color/starOrange</item> <!-- Color for selected stars -->
+    </style>
 </resources>
