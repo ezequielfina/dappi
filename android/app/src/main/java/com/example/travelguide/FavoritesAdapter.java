@@ -9,11 +9,13 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
+
 public class FavoritesAdapter extends RecyclerView.Adapter<FavoritesAdapter.FavoriteViewHolder> {
 
-    private List<Integer> favoritePlaceImageResIds; // List of drawable resource IDs
+    private List<Integer> favoritePlaceImageResIds;
     private Context context;
 
+    // Constructor: recibe el contexto y la lista de imágenes
     public FavoritesAdapter(Context context, List<Integer> favoritePlaceImageResIds) {
         this.context = context;
         this.favoritePlaceImageResIds = favoritePlaceImageResIds;
@@ -22,23 +24,27 @@ public class FavoritesAdapter extends RecyclerView.Adapter<FavoritesAdapter.Favo
     @NonNull
     @Override
     public FavoriteViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        // Infla el layout de cada item (item_place_thumb.xml) para mostrar un lugar
         View view = LayoutInflater.from(context).inflate(R.layout.item_place_thumb, parent, false);
         return new FavoriteViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull FavoriteViewHolder holder, int position) {
+        // Obtiene la imagen según la posición y la asigna al ImageView
         Integer imageResId = favoritePlaceImageResIds.get(position);
         holder.imgPlace.setImageResource(imageResId);
     }
 
     @Override
     public int getItemCount() {
+        // Devuelve la cantidad de items a mostrar (o 0 si no hay datos)
         return favoritePlaceImageResIds != null ? favoritePlaceImageResIds.size() : 0;
     }
 
+    // ViewHolder: representa cada item del RecyclerView
     static class FavoriteViewHolder extends RecyclerView.ViewHolder {
-        ImageView imgPlace;
+        ImageView imgPlace; // Imagen del lugar favorito
 
         public FavoriteViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -46,9 +52,8 @@ public class FavoritesAdapter extends RecyclerView.Adapter<FavoritesAdapter.Favo
         }
     }
 
-    // Optional: A method to update the data in the adapter
+    // Método para actualizar la lista de imágenes
     public void updateData(List<Integer> newImageResIds) {
         this.favoritePlaceImageResIds = newImageResIds;
-        notifyDataSetChanged(); // Notifies the RecyclerView to refresh
     }
 }

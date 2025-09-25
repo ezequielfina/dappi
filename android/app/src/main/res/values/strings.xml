@@ -5,7 +5,4 @@
     <string name="nav_explore">Mapa</string>
     <string name="nav_profile">Perfil</string>
     <string name="empty"></string>
-    <!-- Útil para contentDescription cuando no hay texto descriptivo necesario -->
-    <!-- Si "app_name" ya existe, puedes modificarlo o dejarlo como está -->
-    <!-- <string name="app_name">TravelApp</string> -->
 </resources>

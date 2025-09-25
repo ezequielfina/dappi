@@ -40,14 +40,16 @@
         <item name="android:textSize">14sp</item>
         <item name="android:layout_marginTop">2dp</item>
     </style>
-    <style name="BottomNav.ActiveIndicator">
-        <item name="android:color">@android:color/transparent</item>
-        <item name="android:width">0dp</item>
-        <item name="android:height">0dp</item>
-    </style>
+
     <style name="BottomNav">
-        <item name="android:background">?attr/colorPrimaryVariant</item>
         <item name="itemIconTint">@color/bottom_nav_icon_tint</item>
         <item name="itemTextColor">@color/bottom_nav_icon_tint</item>
     </style>
+
+    <style name="ToolbarOverlay.Dark" parent="ThemeOverlay.Material3.Dark.ActionBar">
+        <item name="colorControlNormal">@color/white</item>
+        <item name="android:textColorPrimary">@color/white</item>
+    </style>
+
+
 </resources>

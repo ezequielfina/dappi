@@ -13,9 +13,10 @@ import java.util.List;
 
 public class FlagsFavoritesAdapter extends RecyclerView.Adapter<FlagsFavoritesAdapter.FlagViewHolder> {
 
-    private List<Integer> flagImageResIds; // List of drawable resource IDs for flags
+    private List<Integer> flagImageResIds;
     private Context context;
 
+    // Constructor: recibe el contexto y la lista de imágenes
     public FlagsFavoritesAdapter(Context context, List<Integer> flagImageResIds) {
         this.context = context;
         this.flagImageResIds = flagImageResIds;
@@ -24,33 +25,37 @@ public class FlagsFavoritesAdapter extends RecyclerView.Adapter<FlagsFavoritesAd
     @NonNull
     @Override
     public FlagViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.item_place_thumb, parent, false);
+        // Infla el layout de cada item de la lista (item_flag.xml)
+        View view = LayoutInflater.from(context).inflate(R.layout.item_flag, parent, false);
         return new FlagViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull FlagViewHolder holder, int position) {
+        // Toma el recurso de imagen correspondiente a la posición y lo asigna al ImageView
         Integer imageResId = flagImageResIds.get(position);
-        holder.imgPlace.setImageResource(imageResId); // Assuming imgPlace is still the ID in item_place_thumb
+        holder.imgFlag.setImageResource(imageResId);
     }
 
     @Override
     public int getItemCount() {
+        // Devuelve la cantidad de elementos en la lista (o 0 si está vacía)
         return flagImageResIds != null ? flagImageResIds.size() : 0;
     }
 
+    // ViewHolder: representa cada item de la lista
     static class FlagViewHolder extends RecyclerView.ViewHolder {
-        ImageView imgPlace; // Assuming imgPlace is the ID of the ImageView in your item layout
+        ImageView imgFlag; // ImageView donde se muestra la bandera
 
         public FlagViewHolder(@NonNull View itemView) {
             super(itemView);
-            imgPlace = itemView.findViewById(R.id.imgPlace);
+            imgFlag = itemView.findViewById(R.id.imgFlag);
         }
     }
 
-    // Optional: A method to update the data in the adapter
+    // Método helper para actualizar la lista de imágenes y refrescar la vista
     public void updateData(List<Integer> newImageResIds) {
         this.flagImageResIds = newImageResIds;
-        notifyDataSetChanged(); // Notifies the RecyclerView to refresh
+        notifyDataSetChanged();
     }
 }
