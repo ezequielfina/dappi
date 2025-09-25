@@ -66,6 +66,7 @@
 
         <!-- Avatar -->
         <ImageView
+            android:id="@+id/avatar"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:src="@mipmap/avatar_foreground"
@@ -196,6 +197,7 @@
 
                     <!-- Imagen -->
                     <FrameLayout
+                        android:id="@+id/place_card_mount"
                         android:layout_width="match_parent"
                         android:layout_height="180dp">
 
@@ -326,7 +328,7 @@
                                 <ImageView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:src="@drawable/arrow_upward"
+                                    android:src="@drawable/exp_arrow_upward"
                                     android:contentDescription="arrow_upward"
                                     android:background="@drawable/circle_bg"
                                     app:tint="#FFFFFF" />
@@ -342,7 +344,7 @@
                                 <ImageView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:src="@drawable/arrow_downward"
+                                    android:src="@drawable/exp_arrow_downward"
                                     android:contentDescription="arrow_downward"
                                     android:background="@drawable/circle_bg"
                                     app:tint="#FFFFFF" />
@@ -486,7 +488,7 @@
                                 <ImageView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:src="@drawable/arrow_upward"
+                                    android:src="@drawable/exp_arrow_upward"
                                     android:contentDescription="arrow_upward"
                                     android:background="@drawable/circle_bg"
                                     app:tint="#FFFFFF" />
@@ -502,7 +504,7 @@
                                 <ImageView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:src="@drawable/arrow_downward"
+                                    android:src="@drawable/exp_arrow_downward"
                                     android:contentDescription="arrow_downward"
                                     android:background="@drawable/circle_bg"
                                     app:tint="#FFFFFF" />
@@ -561,6 +563,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/account_nav"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
