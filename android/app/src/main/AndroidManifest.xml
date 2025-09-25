@@ -40,10 +40,6 @@
             android:theme="@style/Theme.Api" />
         
         <!-- Activities principales de la app -->
-        <activity
-            android:name=".MainActivity"
-            android:exported="false"
-            android:theme="@style/Theme.Api" />
             
         <activity
             android:name=".ui.home.Explore"
