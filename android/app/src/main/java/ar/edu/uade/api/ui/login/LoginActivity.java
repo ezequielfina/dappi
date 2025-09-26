@@ -12,7 +12,6 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import ar.edu.uade.api.R;
-import ar.edu.uade.api.ui.register.RegisterActivity;
 import ar.edu.uade.api.ui.welcome.WelcomeActivity;
 
 public class LoginActivity extends AppCompatActivity {

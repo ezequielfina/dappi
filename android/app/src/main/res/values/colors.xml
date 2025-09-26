@@ -15,4 +15,5 @@
     <color name="button_primary">#FF3498DB</color>
     <color name="button_secondary">#FF2C3E50</color>
     <color name="muted">#B5C6CC</color>
+    <color name="starOrange">#FFFD6F22</color>
 </resources>

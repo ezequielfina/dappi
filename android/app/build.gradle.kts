@@ -3,11 +3,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.travelguide"
+    namespace = "ar.edu.uade.api"
     compileSdk = 36
 
     defaultConfig {
-        applicationId = "com.example.travelguide"
+        applicationId = "ar.edu.uade.api"
         minSdk = 24
         targetSdk = 36
         versionCode = 1

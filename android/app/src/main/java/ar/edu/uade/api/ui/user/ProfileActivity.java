@@ -1,4 +1,4 @@
-package com.example.travelguide;
+package ar.edu.uade.api.ui.user;
 
 import android.os.Bundle;
 import android.view.Menu;
@@ -8,7 +8,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.travelguide.databinding.ActivityProfileBinding;
+import ar.edu.uade.api.R;
+import ar.edu.uade.api.databinding.ActivityProfileBinding;     
 
 import java.util.ArrayList;
 import java.util.List;

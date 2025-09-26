@@ -29,7 +29,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scaleType="centerCrop"
-                android:src="@drawable/parque_rivadavia_foreground"
+                android:src="@drawable/ic_park_foreground"
                 android:fitsSystemWindows="true"
                 app:layout_collapseMode="parallax"
                 android:contentDescription="Imagen del lugar" />
@@ -450,9 +450,9 @@
             <ImageView
                 android:layout_width="35dp"
                 android:layout_height="35dp"
-                android:src="@drawable/home"
+                android:src="@drawable/ic_home"
                 android:contentDescription="Home"
-                app:tint="@color/iconInactive" />
+                app:tint="@color/button_primary" />
         </LinearLayout>
 
         <LinearLayout
@@ -469,7 +469,7 @@
                 android:layout_height="35dp"
                 android:src="@drawable/explore"
                 android:contentDescription="Explore"
-                app:tint="@color/iconActive" />
+                app:tint="@color/button_primary" />
         </LinearLayout>
 
         <LinearLayout
@@ -486,7 +486,7 @@
                 android:layout_height="35dp"
                 android:src="@drawable/account"
                 android:contentDescription="Account"
-                app:tint="@color/iconInactive" />
+                app:tint="@color/button_primary" />
         </LinearLayout>
     </LinearLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

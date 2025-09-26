@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimaryDark"
+    android:background="@color/background_dark"
     android:padding="16dp"
     tools:context=".LeaveReviewFragment"> 
 
@@ -57,8 +57,8 @@
         android:hint="Escribi tu reseña..."
         android:inputType="textMultiLine"
         android:padding="16dp"
-        android:textColor="@color/textColorSecondary"
-        android:textColorHint="@color/textColorSecondary" />
+        android:textColor="@color/text_secondary"
+        android:textColorHint="@color/text_secondary" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -73,7 +73,7 @@
             android:layout_weight="1"
             android:backgroundTint="#FFC107" 
             android:text="CANCELAR"
-            android:textColor="@color/colorPrimaryDark"
+            android:textColor="@color/background_dark"
             android:layout_marginEnd="8dp"/>
 
         <Button
@@ -83,7 +83,7 @@
             android:layout_weight="1"
             android:backgroundTint="#5edfff" 
             android:text="ENVIAR"
-            android:textColor="@color/colorPrimaryDark"
+            android:textColor="@color/background_dark"
             android:layout_marginStart="8dp"/>
     </LinearLayout>
 

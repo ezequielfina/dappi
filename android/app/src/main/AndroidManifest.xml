@@ -14,7 +14,7 @@
         
         <!-- Activity de lanzamiento principal -->
         <activity
-            android:name=".ui.welcome.WelcomeActivity"
+            android:name="ar.edu.uade.api.ui.welcome.WelcomeActivity"
             android:exported="true"
             android:theme="@style/Theme.Api">
             <intent-filter>
@@ -23,30 +23,30 @@
             </intent-filter>
         </activity>
         
-        <!-- Activities del flujo de autenticación -->
+        <!-- Activiti   es del flujo de autenticación -->
         <activity
-            android:name=".ui.register.RegisterActivity"
+            android:name="ar.edu.uade.api.ui.register.RegisterActivity"
             android:exported="false"
             android:theme="@style/Theme.Api" />
             
         <activity
-            android:name=".ui.login.LoginActivity"
+            android:name="ar.edu.uade.api.ui.login.LoginActivity"
             android:exported="false"
             android:theme="@style/Theme.Api" />
             
         <activity
-            android:name=".ui.onboarding.OnboardingActivity"
+            android:name="ar.edu.uade.api.ui.onboarding.OnboardingActivity"
             android:exported="false"
             android:theme="@style/Theme.Api" />
         
         <!-- Activities principales de la app -->
         <activity
-            android:name=".ui.home.Explore"
+            android:name="ar.edu.uade.api.ui.home.Explore"
             android:exported="false"
             android:theme="@style/Theme.Api" />
 
         <activity
-            android:name=".ui.user.ProfileActivity" 
+            android:name="ar.edu.uade.api.ui.user.ProfileActivity"
             android:exported="false"
             android:theme="@style/Theme.Api" />
             
