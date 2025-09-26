@@ -18,21 +18,21 @@ public class Explore extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.explore);
 
-        FrameLayout card_mount = findViewById(R.id.place_card_mount);
+        ImageView card_mount = findViewById(R.id.place_card_mount);
         card_mount.setOnClickListener(v -> {
             Intent intent = new Intent(Explore.this, Place.class);
             startActivity(intent);
         });
 
         ImageView profile_photo = findViewById(R.id.avatar);
-        card_mount.setOnClickListener(v -> {
+        profile_photo.setOnClickListener(v -> {
             Intent intent = new Intent(Explore.this, ProfileActivity.class);
             startActivity(intent);
         });
 
         LinearLayout account_nav = findViewById(R.id.account_nav);
-        card_mount.setOnClickListener(v -> {
-            Intent intent = new Intent(Explore.this, Place.class);
+        account_nav.setOnClickListener(v -> {
+            Intent intent = new Intent(Explore.this, ProfileActivity.class);
             startActivity(intent);
         });
     }

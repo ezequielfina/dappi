@@ -197,11 +197,11 @@
 
                     <!-- Imagen -->
                     <FrameLayout
-                        android:id="@+id/place_card_mount"
                         android:layout_width="match_parent"
                         android:layout_height="180dp">
 
                         <ImageView
+                            android:id="@+id/place_card_mount"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:scaleType="centerCrop"
