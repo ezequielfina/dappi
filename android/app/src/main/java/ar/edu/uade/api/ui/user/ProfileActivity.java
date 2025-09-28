@@ -1,15 +1,20 @@
 package ar.edu.uade.api.ui.user;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MotionEvent;
+import android.widget.LinearLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+
 import ar.edu.uade.api.R;
-import ar.edu.uade.api.databinding.ActivityProfileBinding;     
+import ar.edu.uade.api.databinding.ActivityProfileBinding;
+import ar.edu.uade.api.ui.home.Explore;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -86,19 +91,30 @@ public class ProfileActivity extends AppCompatActivity {
             binding.btnFlagsScrollRight.setOnClickListener(v -> binding.rvFlags.smoothScrollBy(page, 0));
         });
 
+
         // ---------- BOTTOM NAV ----------
-        binding.bottomNav.setSelectedItemId(R.id.navigation_profile);
-        binding.bottomNav.setOnItemSelectedListener(item -> {
-            int itemId = item.getItemId();
-            if (itemId == R.id.navigation_home) {
+        BottomNavigationView bottom = findViewById(R.id.bottomNav);
+        bottom.setSelectedItemId(R.id.navigation_profile);
+        bottom.setOnItemReselectedListener(item -> {});
+        bottom.setOnItemSelectedListener(item -> {
+            if (item.getItemId() == R.id.navigation_profile) return true;
+            if (item.getItemId() == R.id.navigation_home) {
+                startActivity(new Intent(this, Explore.class).addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
+                overridePendingTransition(0,0);
                 return true;
-            } else if (itemId == R.id.navigation_explore) {
-                return true;
-            } else if (itemId == R.id.navigation_profile) {
+            }
+            // TODO: cambiar a MAPA DE GOOGLE
+
+            if (item.getItemId() == R.id.navigation_explore) {
+                startActivity(new Intent(this, Explore.class).addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
+                overridePendingTransition(0,0);
                 return true;
             }
             return false;
         });
+
+
+
     }
 
     @Override

@@ -2,7 +2,6 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background_dark"
@@ -72,7 +71,7 @@
                     android:layout_height="64dp"
                     android:layout_gravity="center_horizontal"
                     android:scaleType="centerCrop"
-                    android:src="@drawable/ic_avatar_placeholder"
+                    android:src="@mipmap/avatar_foreground"
                     app:shapeAppearanceOverlay="@style/CircleImage" />
 
                 <TextView
@@ -354,7 +353,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_width="0dp"
         android:layout_height="56dp"
-        android:background="@color/background_dark"
+        android:background="@drawable/nav_rouded"
         app:itemIconTint="@color/bottom_nav_icon_tint"
         app:itemTextColor="@color/bottom_nav_icon_tint"
         app:labelVisibilityMode="unlabeled"

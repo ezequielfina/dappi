@@ -2,38 +2,70 @@ package ar.edu.uade.api.ui.home;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.FrameLayout;
+import android.util.Log;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-
 import androidx.appcompat.app.AppCompatActivity;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import ar.edu.uade.api.R;
 import ar.edu.uade.api.ui.places.Place;
 import ar.edu.uade.api.ui.user.ProfileActivity;
-import ar.edu.uade.api.R;
 
 public class Explore extends AppCompatActivity {
+
+    private static final String TAG = "ExploreActivity";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.explore);
+        setContentView(R.layout.activity_explore);
 
+        // Clicks de tus cards/avatares con verificación de nulos
         ImageView card_mount = findViewById(R.id.place_card_mount);
-        card_mount.setOnClickListener(v -> {
-            Intent intent = new Intent(Explore.this, Place.class);
-            startActivity(intent);
-        });
+        if (card_mount != null) {
+            card_mount.setOnClickListener(v -> {
+                Log.d(TAG, "Card mount clicked");
+                startActivity(new Intent(Explore.this, Place.class));
+            });
+        } else {
+            Log.e(TAG, "place_card_mount not found in layout");
+        }
 
         ImageView profile_photo = findViewById(R.id.avatar);
-        profile_photo.setOnClickListener(v -> {
-            Intent intent = new Intent(Explore.this, ProfileActivity.class);
-            startActivity(intent);
-        });
+        if (profile_photo != null) {
+            profile_photo.setOnClickListener(v -> {
+                Log.d(TAG, "Profile photo clicked");
+                try {
+                    Intent intent = new Intent(Explore.this, ProfileActivity.class);
+                    startActivity(intent);
+                } catch (Exception e) {
+                    Log.e(TAG, "Error starting ProfileActivity: " + e.getMessage());
+                    e.printStackTrace();
+                }
+            });
+        } else {
+            Log.e(TAG, "avatar ImageView not found in layout");
+        }
 
-        LinearLayout account_nav = findViewById(R.id.account_nav);
-        account_nav.setOnClickListener(v -> {
-            Intent intent = new Intent(Explore.this, ProfileActivity.class);
-            startActivity(intent);
+        BottomNavigationView bottom = findViewById(R.id.bottomNav);
+        bottom.setSelectedItemId(R.id.navigation_home);
+        bottom.setOnItemReselectedListener(item -> {
+        });
+        bottom.setOnItemSelectedListener(item -> {
+            if (item.getItemId() == R.id.navigation_home) return true;
+            if (item.getItemId() == R.id.navigation_profile) {
+                startActivity(new Intent(this, ProfileActivity.class).addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
+                overridePendingTransition(0, 0);
+                return true;
+            }
+            // TODO: cambiar a MAPA DE GOOGLE
+
+            if (item.getItemId() == R.id.navigation_explore) {
+                startActivity(new Intent(this, Explore.class).addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
+                overridePendingTransition(0, 0);
+                return true;
+            }
+            return false;
         });
     }
 }

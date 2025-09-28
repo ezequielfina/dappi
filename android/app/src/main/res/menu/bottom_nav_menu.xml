@@ -9,11 +9,11 @@
 
     <item
         android:id="@+id/navigation_explore"
-        android:icon="@drawable/location"
+        android:icon="@drawable/explore"
         android:title="@string/nav_explore" />
 
     <item
         android:id="@+id/navigation_profile"
-        android:icon="@drawable/person"
+        android:icon="@drawable/account"
         android:title="@string/nav_profile" />
 </menu>
