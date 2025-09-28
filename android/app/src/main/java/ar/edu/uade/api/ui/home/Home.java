@@ -11,21 +11,21 @@ import ar.edu.uade.api.R;
 import ar.edu.uade.api.ui.places.Place;
 import ar.edu.uade.api.ui.user.ProfileActivity;
 
-public class Explore extends AppCompatActivity {
+public class Home extends AppCompatActivity {
 
     private static final String TAG = "ExploreActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_explore);
+        setContentView(R.layout.activity_home);
 
         // Clicks de tus cards/avatares con verificación de nulos
         ImageView card_mount = findViewById(R.id.place_card_mount);
         if (card_mount != null) {
             card_mount.setOnClickListener(v -> {
                 Log.d(TAG, "Card mount clicked");
-                startActivity(new Intent(Explore.this, Place.class));
+                startActivity(new Intent(Home.this, Place.class));
             });
         } else {
             Log.e(TAG, "place_card_mount not found in layout");
@@ -36,7 +36,7 @@ public class Explore extends AppCompatActivity {
             profile_photo.setOnClickListener(v -> {
                 Log.d(TAG, "Profile photo clicked");
                 try {
-                    Intent intent = new Intent(Explore.this, ProfileActivity.class);
+                    Intent intent = new Intent(Home.this, ProfileActivity.class);
                     startActivity(intent);
                 } catch (Exception e) {
                     Log.e(TAG, "Error starting ProfileActivity: " + e.getMessage());
@@ -61,7 +61,7 @@ public class Explore extends AppCompatActivity {
             // TODO: cambiar a MAPA DE GOOGLE
 
             if (item.getItemId() == R.id.navigation_explore) {
-                startActivity(new Intent(this, Explore.class).addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
+                startActivity(new Intent(this, Home.class).addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
                 overridePendingTransition(0, 0);
                 return true;
             }

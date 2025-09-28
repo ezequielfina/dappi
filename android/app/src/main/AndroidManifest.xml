@@ -41,7 +41,7 @@
         
         <!-- Activities principales de la app -->
         <activity
-            android:name="ar.edu.uade.api.ui.home.Explore"
+            android:name="ar.edu.uade.api.ui.home.Home"
             android:exported="false"
             android:theme="@style/Theme.Api" />
 
