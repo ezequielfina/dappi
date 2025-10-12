@@ -3,8 +3,10 @@ package ar.edu.uade.api.ui.user;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -31,12 +33,11 @@ public class ProfileActivity extends AppCompatActivity {
         // ---------- CONFIGURACIÓN DE TOOLBAR ----------
         setSupportActionBar(binding.topAppBar);
         if (getSupportActionBar() != null) {
-            getSupportActionBar().setTitle(""); // Título vacío
-            getSupportActionBar().setDisplayHomeAsUpEnabled(false); // No muestra botón atrás
+            // NO mostrar flecha de retroceso por defecto
+            getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         }
 
         // ---------- SECCIÓN FAVORITOS ----------
-        // Lista de imágenes de prueba para favoritos
         List<Integer> favoriteImages = new ArrayList<>();
         favoriteImages.add(R.drawable.ic_park_foreground);
         favoriteImages.add(R.drawable.ic_park_foreground);
@@ -45,7 +46,6 @@ public class ProfileActivity extends AppCompatActivity {
 
         FavoritesAdapter favoritesAdapter = new FavoritesAdapter(this, favoriteImages);
 
-        // LayoutManager horizontal sin scroll (bloquea cualquier desplazamiento)
         LinearLayoutManager favoritesNoScrollLM =
                 new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false) {
                     @Override public boolean canScrollHorizontally() { return false; }
@@ -57,7 +57,6 @@ public class ProfileActivity extends AppCompatActivity {
         binding.rvFavorites.setAdapter(favoritesAdapter);
 
         // ---------- SECCIÓN BANDERAS ----------
-        // Lista de imágenes de prueba para banderas
         List<Integer> flagImages = new ArrayList<>();
         flagImages.add(R.drawable.ic_flag_arg);
         flagImages.add(R.drawable.ic_flag_arg);
@@ -67,7 +66,6 @@ public class ProfileActivity extends AppCompatActivity {
 
         FlagsFavoritesAdapter flagsAdapter = new FlagsFavoritesAdapter(this, flagImages);
 
-        // LayoutManager horizontal con scroll habilitado (para las flechas)
         LinearLayoutManager flagsLM =
                 new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         binding.rvFlags.setLayoutManager(flagsLM);
@@ -75,21 +73,18 @@ public class ProfileActivity extends AppCompatActivity {
         binding.rvFlags.setOverScrollMode(RecyclerView.OVER_SCROLL_NEVER);
         binding.rvFlags.setAdapter(flagsAdapter);
 
-        // Bloquea el swipe manual pero permite clicks y scroll programado
         binding.rvFlags.addOnItemTouchListener(new RecyclerView.SimpleOnItemTouchListener() {
             @Override
             public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
-                return e.getAction() == MotionEvent.ACTION_MOVE; // solo bloquea arrastre
+                return e.getAction() == MotionEvent.ACTION_MOVE;
             }
         });
 
-        // Botones de flecha que mueven el carrusel de banderas por "páginas"
         binding.rvFlags.post(() -> {
             int page = (int) (binding.rvFlags.getWidth() * 0.8f);
             binding.btnFlagsScrollLeft.setOnClickListener(v -> binding.rvFlags.smoothScrollBy(-page, 0));
             binding.btnFlagsScrollRight.setOnClickListener(v -> binding.rvFlags.smoothScrollBy(page, 0));
         });
-
 
         // ---------- BOTTOM NAV ----------
         BottomNavigationView bottom = findViewById(R.id.bottomNav);
@@ -102,8 +97,6 @@ public class ProfileActivity extends AppCompatActivity {
                 overridePendingTransition(0,0);
                 return true;
             }
-            // TODO: cambiar a MAPA DE GOOGLE
-
             if (item.getItemId() == R.id.navigation_explore) {
                 startActivity(new Intent(this, Home.class).addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
                 overridePendingTransition(0,0);
@@ -111,15 +104,23 @@ public class ProfileActivity extends AppCompatActivity {
             }
             return false;
         });
-
-
-
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Infla el menú superior del perfil
+        // Infla el menú con el ícono de hamburguesa
         getMenuInflater().inflate(R.menu.menu_profile_top, menu);
         return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        // Manejar el click del menú hamburguesa
+        if (item.getItemId() == R.id.action_menu) { // Asegúrate de que este ID coincida con el de tu menu XML
+            Intent intent = new Intent(this, ProfileConfigActivity.class);
+            startActivity(intent);
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
