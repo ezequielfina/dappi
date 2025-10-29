@@ -33,6 +33,7 @@ public class AuthenticateService {
         }
 
         userService.save(user);
+
         var jwtToken = jwtService.generateToken(user);
 
         return AuthenticationResponse.builder()

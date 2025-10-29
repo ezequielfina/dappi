@@ -1,10 +1,17 @@
 package com.uade.tg.controllers;
 
 
+import com.uade.tg.dto.UpdateUserProfile;
+import com.uade.tg.entities.Review;
+import com.uade.tg.entities.User;
 import com.uade.tg.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/users")
@@ -17,6 +24,23 @@ public class UserController {
 
     public UserController(UserService userService) {
         this.userService = userService;
+    }
+
+    @GetMapping("/me/reviews")
+    public ResponseEntity<List<Review>> getMyReviews(@AuthenticationPrincipal User user) {
+        return ResponseEntity.ok(user.getReviews());
+    }
+
+    @PutMapping("/me")
+    public ResponseEntity<Optional<User>> updateProfile(
+            @AuthenticationPrincipal User user,
+            @RequestBody UpdateUserProfile request) {
+        return ResponseEntity.ok(userService.updateProfile(user.getId(), request));
+    }
+
+    @GetMapping("/me/reviews/top")
+    public ResponseEntity<List<Review>> getMyTopReviews(@AuthenticationPrincipal User user) {
+        return ResponseEntity.ok(userService.getMyReviewsOrderedByVotes(user.getId()));
     }
 
 
