@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Dimensiones para pantallas grandes de teléfonos (sw480dp+) -->
+    
+    <!-- Márgenes optimizados para pantallas grandes -->
+    <dimen name="margin_medium">20dp</dimen>
+    <dimen name="margin_large">28dp</dimen>
+    <dimen name="margin_xlarge">36dp</dimen>
+    
+    <!-- Tamaños de texto optimizados -->
+    <dimen name="text_size_small">13sp</dimen>
+    <dimen name="text_size_medium">15sp</dimen>
+    <dimen name="text_size_large">17sp</dimen>
+    <dimen name="text_size_xlarge">19sp</dimen>
+    <dimen name="text_size_title">26sp</dimen>
+    <dimen name="text_size_header">30sp</dimen>
+</resources>
+

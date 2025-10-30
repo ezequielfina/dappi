@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+    
+    <application
+        android:allowBackup="true"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
+        android:icon="@mipmap/ic_launcher"
+        android:label=""
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.Api">
+        
+        <!-- Activity de lanzamiento principal -->
+        <activity
+            android:name="ar.edu.uade.api.ui.welcome.WelcomeActivity"
+            android:exported="true"
+            android:theme="@style/Theme.Api">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        
+        <!-- Activiti   es del flujo de autenticación -->
+        <activity
+            android:name="ar.edu.uade.api.ui.register.RegisterActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Api" />
+            
+        <activity
+            android:name="ar.edu.uade.api.ui.login.LoginActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Api" />
+            
+        <activity
+            android:name="ar.edu.uade.api.ui.onboarding.OnboardingActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Api" />
+        
+        <!-- Activities principales de la app -->
+        <activity
+            android:name="ar.edu.uade.api.ui.home.Home"
+            android:exported="false"
+            android:theme="@style/Theme.Api" />
+
+        <activity
+            android:name="ar.edu.uade.api.ui.user.ProfileActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Api" />
+        <activity
+            android:name="ar.edu.uade.api.ui.places.Place"
+            android:exported="false"
+            android:theme="@style/Theme.Api" />
+        <activity
+            android:name="ar.edu.uade.api.ui.places.Review"
+            android:exported="false"
+            android:theme="@style/Theme.Api" />
+        <activity android:name="ar.edu.uade.api.ui.user.ProfileConfigActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Api"/>
+
+
+    </application>
+</manifest>
