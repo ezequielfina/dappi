@@ -1,6 +1,7 @@
 package com.uade.tg.controllers;
 
 
+import com.uade.tg.dto.FirstRegisterDTO;
 import com.uade.tg.dto.UpdateUserProfileDTO;
 import com.uade.tg.entities.Review;
 import com.uade.tg.entities.User;
@@ -26,10 +27,6 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping("/me/reviews")
-    public ResponseEntity<List<Review>> getMyReviews(@AuthenticationPrincipal User user) {
-        return ResponseEntity.ok(user.getReviews());
-    }
 
     @PutMapping("/me/update")
     public ResponseEntity<Optional<User>> updateProfile(
@@ -38,9 +35,11 @@ public class UserController {
         return ResponseEntity.ok(userService.updateProfile(user.getId(), request));
     }
 
-    @GetMapping("/me/reviews/top")
-    public ResponseEntity<List<Review>> getMyTopReviews(@AuthenticationPrincipal User user) {
-        return ResponseEntity.ok(userService.getMyReviewsOrderedByVotes(user.getId()));
+    @PutMapping("/onboarding")
+    public ResponseEntity<Optional<User>> onBoarding(
+            @AuthenticationPrincipal User user,
+            @RequestBody FirstRegisterDTO request) {
+        return ResponseEntity.ok(userService.onBoardingPage(user.getId(),request));
     }
 
 

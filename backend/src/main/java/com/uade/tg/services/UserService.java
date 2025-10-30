@@ -1,11 +1,13 @@
 package com.uade.tg.services;
 
 
+import com.uade.tg.dto.FirstRegisterDTO;
 import com.uade.tg.dto.UpdateUserProfileDTO;
 import com.uade.tg.entities.Review;
 import com.uade.tg.entities.User;
 import com.uade.tg.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,8 +19,7 @@ public class UserService {
     @Autowired
     private final UserRepository userRepository;
 
-    @Autowired
-    private final ReviewRepository reviewRepository;
+
 
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
@@ -36,9 +37,20 @@ public class UserService {
         return Optional.of(userRepository.save(user));
 
     }
-    public Optional<User>  updateProfile(Integer userId, UpdateUserProfileDTO request) {
+    public Optional<User> onBoardingPage(Long userId, FirstRegisterDTO req) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+
+        user.setCountry(req.getCountry());
+        user.setFavoritePlace(req.getFavoritePlace());
+        user.setProfilePicture(req.getProfileImageUrl());
+
+        return Optional.of(userRepository.save(user));
+    }
+
+    public Optional<User>  updateProfile(Long userId, UpdateUserProfileDTO request) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
         if (request.getEmail() != null && !request.getEmail().isEmpty()) {
             user.setEmail(request.getEmail());
@@ -55,10 +67,5 @@ public class UserService {
         return Optional.of(userRepository.save(user));
     }
 
-    public List<Review> getMyReviewsOrderedByVotes(Integer userId) {
-        // Devolver los reviews con mas votos para mostrarlos en el perfil
-        return reviewRepository.findByUserIdOrderByScoreDesc(userId);
-
-    }
 
 }

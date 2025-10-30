@@ -21,7 +21,7 @@ public class User implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     @Column(unique = true, nullable = false)
     private String userName;
@@ -39,6 +39,12 @@ public class User implements UserDetails {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<ReviewVote> reviewVotes;
+
+    @Column(nullable = false)
+    private String country;
+
+    @Column(nullable = false)
+    private String favoritePlace;
 
     @Column(nullable = false)
     private String profilePicture;
