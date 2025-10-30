@@ -1,7 +1,7 @@
 package com.uade.tg.services;
 
 
-import com.uade.tg.dto.UpdateUserProfile;
+import com.uade.tg.dto.UpdateUserProfileDTO;
 import com.uade.tg.entities.Review;
 import com.uade.tg.entities.User;
 import com.uade.tg.repositories.UserRepository;
@@ -36,7 +36,7 @@ public class UserService {
         return Optional.of(userRepository.save(user));
 
     }
-    public Optional<User>  updateProfile(Integer userId, UpdateUserProfile request) {
+    public Optional<User>  updateProfile(Integer userId, UpdateUserProfileDTO request) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 

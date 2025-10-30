@@ -1,7 +1,7 @@
 package com.uade.tg.controllers;
 
 
-import com.uade.tg.dto.UpdateUserProfile;
+import com.uade.tg.dto.UpdateUserProfileDTO;
 import com.uade.tg.entities.Review;
 import com.uade.tg.entities.User;
 import com.uade.tg.services.UserService;
@@ -31,10 +31,10 @@ public class UserController {
         return ResponseEntity.ok(user.getReviews());
     }
 
-    @PutMapping("/me")
+    @PutMapping("/me/update")
     public ResponseEntity<Optional<User>> updateProfile(
             @AuthenticationPrincipal User user,
-            @RequestBody UpdateUserProfile request) {
+            @RequestBody UpdateUserProfileDTO request) {
         return ResponseEntity.ok(userService.updateProfile(user.getId(), request));
     }
 
