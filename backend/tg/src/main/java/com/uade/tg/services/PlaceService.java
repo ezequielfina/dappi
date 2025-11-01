@@ -10,7 +10,6 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -36,7 +35,7 @@ public class PlaceService {
         return this.placeRep.existsById(place.getId());
     }
 
-    public Place findPlaceById(UUID id) {
+    public Place findPlaceById(Long id) {
         try {
             return this.placeRep.findById(id).orElseThrow(
                     () -> new NotFoundException("place")
@@ -54,7 +53,7 @@ public class PlaceService {
         }
     }
 
-    public List<Place> findAllPlacesByPlaceTypeId(UUID idPlaceType) {
+    public List<Place> findAllPlacesByPlaceTypeId(Long idPlaceType) {
         try {
             return this.placeRep.findAllByPlaceType_Id(idPlaceType);
         } catch (DataAccessException ex) {

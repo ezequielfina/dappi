@@ -3,11 +3,10 @@ package com.uade.tg.dto;
 import lombok.Builder;
 
 import java.sql.Time;
-import java.util.UUID;
 
 @Builder
 public record PlaceDTO(
-    UUID id,
+    Long id,
     Double latitude,
     Double longitude,
     String name,

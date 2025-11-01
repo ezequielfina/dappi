@@ -7,7 +7,6 @@ import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
 import java.sql.Time;
-import java.util.UUID;
 
 @Entity
 @Builder
@@ -18,7 +17,7 @@ import java.util.UUID;
 public class Place {
     @Id
     @GeneratedValue
-    private UUID id;
+    private Long id;
 
     @Column(name = "latitude")
     private Double latitude;

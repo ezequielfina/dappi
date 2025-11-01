@@ -6,8 +6,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
-import java.util.UUID;
-
 @Entity
 @Builder
 @AllArgsConstructor
@@ -17,7 +15,7 @@ import java.util.UUID;
 public class Health {
     @Id
     @GeneratedValue
-    private UUID id;
+    private Long id;
 
     @Column(name = "status")
     private String status;

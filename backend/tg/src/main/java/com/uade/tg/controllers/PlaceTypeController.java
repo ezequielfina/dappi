@@ -10,7 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/place_type")
@@ -28,7 +27,7 @@ public class PlaceTypeController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<PlaceTypeDTO> getPlaceTypeById(@PathVariable UUID id) {
+    public ResponseEntity<PlaceTypeDTO> getPlaceTypeById(@PathVariable Long id) {
         PlaceType placeType = this.placeTypeService.findPlaceTypeById(id);
 
         PlaceTypeDTO placeTypeDTO = PlaceTypeTransformer.transformToDTO(placeType);
@@ -44,7 +43,7 @@ public class PlaceTypeController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<PlaceTypeDTO> updateDescription(@PathVariable UUID id, @RequestBody PlaceTypeDTO placeTypeDTO) {
+    public ResponseEntity<PlaceTypeDTO> updateDescription(@PathVariable Long id, @RequestBody PlaceTypeDTO placeTypeDTO) {
         PlaceType placeType = this.placeTypeService.updateDescription(id, placeTypeDTO.description());
 
         placeTypeDTO = PlaceTypeTransformer.transformToDTO(placeType);

@@ -9,7 +9,6 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -31,7 +30,7 @@ public class PlaceTypeService {
         return this.placeTypeRep.existsPlaceTypeById(placeType.getId());
     }
 
-    public PlaceType findPlaceTypeById(UUID id) {
+    public PlaceType findPlaceTypeById(Long id) {
         try {
             return this.placeTypeRep.findById(id).orElseThrow(
                     () -> new NotFoundException("placeType")
@@ -49,7 +48,7 @@ public class PlaceTypeService {
         }
     }
 
-    public PlaceType updateDescription(UUID id, String newDescription) {
+    public PlaceType updateDescription(Long id, String newDescription) {
         try {
             PlaceType placeType = this.findPlaceTypeById(id);
 
