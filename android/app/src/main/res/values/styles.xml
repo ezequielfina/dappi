@@ -1,9 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Estilos para botones -->
+    <style name="ButtonPrimary" parent="Widget.Material3.Button">
+        <item name="android:background">@drawable/button_primary</item>
+        <item name="android:textColor">@color/text_primary</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:elevation">4dp</item>
+        <item name="android:minHeight">48dp</item>
+        <item name="backgroundTint">@null</item>
+        <item name="android:insetLeft">0dp</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetRight">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+    </style>
+
+    <style name="ButtonSecondary" parent="Widget.Material3.Button.OutlinedButton">
+        <item name="android:background">@drawable/button_secondary</item>
+        <item name="android:textColor">@color/text_primary</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:elevation">4dp</item>
+        <item name="android:minHeight">48dp</item>
+        <item name="backgroundTint">@null</item>
+        <item name="android:insetLeft">0dp</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetRight">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+    </style>
+
+    <!-- Estilos para imágenes -->
     <style name="CircleImage">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">50%</item>
     </style>
 
+    <!-- Estilos para títulos y textos -->
     <style name="SectionTitle">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
@@ -16,6 +48,7 @@
         <item name="android:paddingBottom">8dp</item>
     </style>
 
+    <!-- Estilos para estadísticas -->
     <style name="StatPill">
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">wrap_content</item>
@@ -41,15 +74,15 @@
         <item name="android:layout_marginTop">2dp</item>
     </style>
 
+    <!-- Estilos para navegación -->
     <style name="BottomNav">
         <item name="itemIconTint">@color/bottom_nav_icon_tint</item>
         <item name="itemTextColor">@color/bottom_nav_icon_tint</item>
     </style>
 
+    <!-- Estilos para toolbar -->
     <style name="ToolbarOverlay.Dark" parent="ThemeOverlay.Material3.Dark.ActionBar">
         <item name="colorControlNormal">@color/text_primary</item>
         <item name="android:textColorPrimary">@color/text_primary</item>
     </style>
-
-
 </resources>
