@@ -1,0 +1,12 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <style name="Base.Theme.Travelguide" parent="Theme.Material3.DayNight.NoActionBar">
+
+    </style>
+
+    <style name="Theme.Travelguide" parent="Base.Theme.Travelguide" />
+    <style name="BottomNav.ActiveIndicator"
+        parent="Widget.Material3.BottomNavigationView.ActiveIndicator">
+        <item name="android:drawable">@drawable/bottom_nav_active_indicator_bg</item>
+    </style>
+</resources>
