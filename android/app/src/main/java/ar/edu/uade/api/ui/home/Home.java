@@ -1,9 +1,11 @@
 package ar.edu.uade.api.ui.home;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ImageView;
+import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -14,12 +16,20 @@ import ar.edu.uade.api.ui.user.ProfileActivity;
 
 public class Home extends AppCompatActivity {
 
-    private static final String TAG = "ExploreActivity";
+    private static final String TAG = "HomeActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+
+        // Personalizar el saludo
+        TextView tvGreeting = findViewById(R.id.tvGreeting);
+        if (tvGreeting != null) {
+            SharedPreferences sharedPreferences = getSharedPreferences("TravelGuidePrefs", MODE_PRIVATE);
+            String username = sharedPreferences.getString("username", "Usuario"); // "Usuario" como valor por defecto
+            tvGreeting.setText("Hola, " + username);
+        }
 
         // Clicks de tus cards/avatares con verificación de nulos
         ImageView card_mount = findViewById(R.id.place_card_mount);
@@ -48,6 +58,7 @@ public class Home extends AppCompatActivity {
             Log.e(TAG, "avatar ImageView not found in layout");
         }
 
+        // Configuración del BottomNavigationView
         BottomNavigationView bottom = findViewById(R.id.bottomNav);
         bottom.setSelectedItemId(R.id.navigation_home);
         bottom.setOnItemReselectedListener(item -> {
