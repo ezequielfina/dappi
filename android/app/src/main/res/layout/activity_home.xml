@@ -118,13 +118,13 @@
             android:layout_height="48dp"
             android:layout_weight="1"
             android:autofillHints=""
-            android:minHeight="48dp"
+            android:minHeight="30dp"
             android:importantForAccessibility="yes"
             android:hint="Buscar lugar"
             android:inputType="text"
             android:paddingHorizontal="14dp"
             android:textColorHint="#B0B0B0"
-            android:textSize="16sp"
+            android:textSize="13sp"
             android:background="@null" />
 
         <ImageView

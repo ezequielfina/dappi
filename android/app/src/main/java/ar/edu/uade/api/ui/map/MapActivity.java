@@ -39,10 +39,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
 
-        // Inicializar FusedLocationProviderClient
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
-        // Obtener el SupportMapFragment y registrar el callback
         mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.mapFragment);
         if (mapFragment != null) {
@@ -55,27 +53,37 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
         mMap = googleMap;
-        
+
         // Configuración básica del mapa
         mMap.getUiSettings().setZoomControlsEnabled(true);
         mMap.getUiSettings().setMyLocationButtonEnabled(true);
         mMap.getUiSettings().setCompassEnabled(true);
         mMap.getUiSettings().setMapToolbarEnabled(true);
 
-        // Solicitar permisos de ubicación
+        // Revisar permisos y habilitar la capa "Mi Ubicación"
         if (checkLocationPermission()) {
             enableMyLocation();
-            showCurrentLocation();
         } else {
             requestLocationPermission();
         }
 
-        // Configurar ubicación predeterminada (Buenos Aires, Argentina)
-        LatLng buenosAires = new LatLng(-34.6037, -58.3816);
-        mMap.addMarker(new MarkerOptions()
-                .position(buenosAires)
-                .title("Buenos Aires"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(buenosAires, 12));
+        // Comprobar si se pasó una ubicación específica para mostrar
+        Intent intent = getIntent();
+        if (intent != null && intent.hasExtra("latitude") && intent.hasExtra("longitude")) {
+            double latitude = intent.getDoubleExtra("latitude", 0);
+            double longitude = intent.getDoubleExtra("longitude", 0);
+            String title = intent.getStringExtra("title");
+            if (title == null) {
+                title = "Ubicación seleccionada";
+            }
+
+            LatLng placeLocation = new LatLng(latitude, longitude);
+            mMap.addMarker(new MarkerOptions().position(placeLocation).title(title));
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(placeLocation, 15));
+        } else {
+            // Si no, mostrar la ubicación actual del usuario
+            showCurrentLocation();
+        }
     }
 
     private void setupBottomNavigation() {
@@ -119,6 +127,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 showCurrentLocation();
             } else {
                 Toast.makeText(this, "Permiso de ubicación denegado", Toast.LENGTH_SHORT).show();
+                // Si se niegan los permisos, mostrar una ubicación por defecto
+                showDefaultLocation();
             }
         }
     }
@@ -136,16 +146,26 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private void showCurrentLocation() {
         if (checkLocationPermission()) {
             Task<Location> locationTask = fusedLocationClient.getLastLocation();
-            locationTask.addOnSuccessListener(new OnSuccessListener<Location>() {
-                @Override
-                public void onSuccess(Location location) {
-                    if (location != null && mMap != null) {
-                        LatLng currentLocation = new LatLng(location.getLatitude(), location.getLongitude());
-                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 15));
-                    }
+            locationTask.addOnSuccessListener(location -> {
+                if (location != null && mMap != null) {
+                    LatLng currentLocation = new LatLng(location.getLatitude(), location.getLongitude());
+                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 15));
+                } else {
+                    // No se pudo obtener la ubicación, mostrar la de por defecto
+                    showDefaultLocation();
                 }
             });
+        } else {
+            showDefaultLocation();
         }
     }
+    
+    private void showDefaultLocation(){
+        if (mMap == null) return;
+        LatLng buenosAires = new LatLng(-34.6037, -58.3816);
+        mMap.addMarker(new MarkerOptions()
+                .position(buenosAires)
+                .title("Buenos Aires"));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(buenosAires, 12));
+    }
 }
-
