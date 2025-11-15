@@ -11,7 +11,7 @@ public class Place extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.place);
+        setContentView(R.layout.activity_place);
 
         Button leaveReviewButton = findViewById(R.id.leave_review_button);
         leaveReviewButton.setOnClickListener(v -> {
