@@ -3,6 +3,7 @@ package ar.edu.uade.api.ui.places;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -26,6 +27,12 @@ public class Place extends AppCompatActivity {
         if (titleView != null) {
             titleView.setText(placeTitle);
         }
+
+        // Botón para volver atrás
+        ImageView backButton = findViewById(R.id.back_button);
+        backButton.setOnClickListener(v -> {
+            finish(); // Cierra la actividad actual y vuelve a la anterior (Home)
+        });
 
         // Botón para dejar una reseña
         Button leaveReviewButton = findViewById(R.id.leave_review_button);
