@@ -21,7 +21,7 @@
             android:value="AIzaSyCQi2ewYbxlK8D_ADcrH2TKiLBL6cyQei0" />
 
         <activity
-            android:name="ar.edu.uade.api.ui.login.LoginActivity"
+            android:name="ar.edu.uade.api.ui.welcome.WelcomeActivity"
             android:exported="true"
             android:theme="@style/Theme.Api">
             <intent-filter>
@@ -31,7 +31,7 @@
         </activity>
 
         <activity
-            android:name="ar.edu.uade.api.ui.welcome.WelcomeActivity"
+            android:name="ar.edu.uade.api.ui.login.LoginActivity"
             android:exported="false"
             android:theme="@style/Theme.Api" />
 
