@@ -1,6 +1,7 @@
 package ar.edu.uade.api.ui.places;
 
 import android.os.Bundle;
+import android.widget.Button;
 import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,6 +17,12 @@ public class Review extends AppCompatActivity {
         // Botón para volver atrás
         ImageView backButton = findViewById(R.id.back_button_review);
         backButton.setOnClickListener(v -> {
+            finish(); // Cierra la actividad actual y vuelve a la anterior (Place)
+        });
+
+        // Botón para cancelar
+        Button cancelButton = findViewById(R.id.cancel_button);
+        cancelButton.setOnClickListener(v -> {
             finish(); // Cierra la actividad actual y vuelve a la anterior (Place)
         });
     }

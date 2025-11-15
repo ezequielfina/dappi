@@ -62,30 +62,33 @@
         android:textColorHint="@color/text_secondary" />
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="454dp"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_alignParentBottom="true">
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="15dp"
+        android:layout_marginBottom="459dp"
+        android:orientation="horizontal">
 
         <Button
             android:id="@+id/cancel_button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
             android:layout_weight="1"
-            android:backgroundTint="#FFC107" 
+            android:backgroundTint="#FFC107"
             android:text="CANCELAR"
-            android:textColor="@color/background_dark"
-            android:layout_marginEnd="8dp"/>
+            android:textColor="@color/background_dark" />
 
         <Button
             android:id="@+id/submit_button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
             android:layout_weight="1"
-            android:backgroundTint="#5edfff" 
+            android:backgroundTint="#5edfff"
             android:text="ENVIAR"
-            android:textColor="@color/background_dark"
-            android:layout_marginStart="8dp"/>
+            android:textColor="@color/background_dark" />
     </LinearLayout>
 
 </RelativeLayout>
