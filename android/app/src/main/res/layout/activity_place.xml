@@ -10,17 +10,16 @@
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/app_bar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="400dp"
         android:background="@android:color/transparent"
-        android:fitsSystemWindows="true"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
             android:id="@+id/toolbar_layout"
             android:layout_width="match_parent"
-            android:layout_height="350dp"
-            android:fitsSystemWindows="true"
+            android:layout_height="match_parent" 
             app:contentScrim="@color/background_dark"
+            app:statusBarScrim="@android:color/transparent" 
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
             app:toolbarId="@+id/toolbar"
             app:expandedTitleTextColor="@android:color/transparent"
@@ -32,13 +31,12 @@
                 android:layout_height="match_parent"
                 android:scaleType="centerCrop"
                 android:src="@drawable/ic_park_foreground"
-                android:fitsSystemWindows="true"
                 app:layout_collapseMode="parallax"
                 android:contentDescription="Imagen del lugar" />
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="305dp"
+                android:layout_height="350dp"
                 android:layout_gravity="bottom"
                 android:background="@drawable/gradient_overlay_detail" />
 
@@ -157,18 +155,10 @@
                 android:id="@+id/place_description"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="El Monte Bromo es un volcán activo y forma parte del macizo de Tengger, en Indonesia. Con 2,329 metros, no es el pico más alto del macizo, pero es el más conocido... "
+                android:text="El Monte Bromo es un volcán activo y forma parte del macizo de Tengger, en Indonesia. Con 2,329 metros, no es el pico más alto del macizo, pero es el más conocido."
                 android:textColor="@color/text_secondary"
                 android:textSize="14sp"
                 android:layout_marginTop="8dp" />
-            <TextView
-                android:id="@+id/read_more_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Leer mas"
-                android:textColor="@color/accent_blue"
-                android:textSize="14sp"
-                android:textStyle="bold"/>
 
             <RelativeLayout
                 android:layout_width="match_parent"
