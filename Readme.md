@@ -50,6 +50,29 @@
 - Exploración de lugares con horarios y precios.  
 - Feed básico con reseñas de la gente que seguís.  
 
+## ✅ Nuevas Funcionalidades Implementadas
+
+### 📸 Sistema de Cámara para Reseñas (Noviembre 2025)
+- **Captura de fotos**: Los usuarios pueden tomar fotos al crear reseñas
+- **Validación GPS**: Implementada con fórmula de Haversine (deshabilitada en modo demo)
+- **Almacenamiento de fotos**: Backend con filesystem local + base de datos
+- **Feedback en tiempo real**: Muestra estado según modo (producción/demo)
+
+### 🎭 **MODO DEMO ACTIVO**
+Para facilitar presentaciones con lugares hardcodeados:
+- ✅ Validación GPS **deshabilitada**
+- ✅ Botón ENVIAR siempre habilitado
+- ✅ Funciona desde cualquier ubicación
+- ℹ️ Los datos GPS se guardan pero no se validan
+
+**Ver documentación completa:**
+- 📄 `CAMERA_FEATURE_IMPLEMENTATION.md` - Detalles técnicos
+- 🚀 `INSTRUCCIONES_PRUEBA.md` - Cómo probar la funcionalidad
+- 📋 `RESUMEN_IMPLEMENTACION.md` - Resumen ejecutivo
+- 🎭 `MODO_DEMO.md` - **Información sobre modo demo**
+
+---
+
 ## Tareas H1
 - Figma con pantallas clave.  
 - Flujo de pantallas definido.  

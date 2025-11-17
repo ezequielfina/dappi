@@ -12,4 +12,6 @@ public class CreateReviewRequestDTO {
     private Long placeId;
     private String description;
     private Integer rateToPlace;
+    private Double userLatitude;
+    private Double userLongitude;
 }

@@ -28,8 +28,12 @@ public class Review {
     @Column(nullable = false)
     private Integer reviewVotes;
 
-    //TODO: Hay que utilizar sensores para el TP, podemos agregar una foto del lugar donde dejamos la review.
-    //private String photoReview;
+    // Ubicación GPS del usuario al momento de crear la reseña (para validación)
+    @Column(name = "user_latitude")
+    private Double userLatitude;
+
+    @Column(name = "user_longitude")
+    private Double userLongitude;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
@@ -38,5 +42,8 @@ public class Review {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "place_id", nullable = false)
     private Place place;
+
+    @OneToMany(mappedBy = "review", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ReviewPhoto> photos;
 
 }
