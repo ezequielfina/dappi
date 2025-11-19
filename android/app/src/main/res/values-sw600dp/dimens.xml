@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Dimensiones para tablets (sw600dp+) -->
+    
+    <!-- Márgenes más grandes para tablets -->
+    <dimen name="margin_medium">24dp</dimen>
+    <dimen name="margin_large">32dp</dimen>
+    <dimen name="margin_xlarge">48dp</dimen>
+    
+    <!-- Tamaños de texto más grandes para tablets -->
+    <dimen name="text_size_small">14sp</dimen>
+    <dimen name="text_size_medium">16sp</dimen>
+    <dimen name="text_size_large">18sp</dimen>
+    <dimen name="text_size_xlarge">20sp</dimen>
+    <dimen name="text_size_title">28sp</dimen>
+    <dimen name="text_size_header">32sp</dimen>
+    
+    <!-- Alturas más grandes para tablets -->
+    <dimen name="button_height">64dp</dimen>
+    <dimen name="input_height">64dp</dimen>
+</resources>
+
