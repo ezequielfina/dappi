@@ -50,6 +50,35 @@
 - Exploración de lugares con horarios y precios.  
 - Feed básico con reseñas de la gente que seguís.  
 
+## ✅ Nuevas Funcionalidades Implementadas
+
+### 📸 Sistema de Cámara para Reseñas (Noviembre 2025)
+- **Captura de fotos**: Los usuarios pueden tomar fotos al crear reseñas
+- **Validación GPS**: Implementada con fórmula de Haversine (deshabilitada en modo demo)
+- **Almacenamiento de fotos**: Backend con filesystem local + base de datos
+- **Feedback en tiempo real**: Muestra estado según modo (producción/demo)
+
+### 🎭 **MODO DEMO ACTIVO**
+Para facilitar presentaciones con lugares hardcodeados:
+- ✅ Validación GPS **deshabilitada**
+- ✅ Botón ENVIAR siempre habilitado
+- ✅ Funciona desde cualquier ubicación
+- ℹ️ Los datos GPS se guardan pero no se validan
+
+### 📴 **Sistema Offline** (Noviembre 2025)
+- **Funciona sin internet**: Las reseñas se guardan localmente cuando no hay conexión
+- **Sincronización automática**: Al recuperar conexión, se sincronizan automáticamente
+- **Base de datos local**: Room (SQLite) para almacenamiento persistente
+- **Detector de conectividad**: NetworkManager detecta cambios de red en tiempo real
+- **Indicadores UI**: Muestra estado online/offline claramente al usuario
+- **Repository Pattern**: Abstrae la fuente de datos (local vs remoto)
+
+**Ver documentación completa:**
+- 📄 `DOCUMENTACION_TECNICA_COMPLETA.md` - Documentación completa del proyecto
+- 📴 `FUNCIONALIDAD_OFFLINE.md` - **Detalles de funcionalidad offline**
+
+---
+
 ## Tareas H1
 - Figma con pantallas clave.  
 - Flujo de pantallas definido.  

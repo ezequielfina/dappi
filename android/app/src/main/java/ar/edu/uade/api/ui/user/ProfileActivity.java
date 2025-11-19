@@ -16,6 +16,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import ar.edu.uade.api.R;
 import ar.edu.uade.api.databinding.ActivityProfileBinding;
 import ar.edu.uade.api.ui.home.Home;
+import ar.edu.uade.api.ui.map.MapActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -98,7 +99,7 @@ public class ProfileActivity extends AppCompatActivity {
                 return true;
             }
             if (item.getItemId() == R.id.navigation_explore) {
-                startActivity(new Intent(this, Home.class).addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
+                startActivity(new Intent(this, MapActivity.class).addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
                 overridePendingTransition(0,0);
                 return true;
             }

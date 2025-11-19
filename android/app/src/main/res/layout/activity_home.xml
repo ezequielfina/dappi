@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background_dark"
-    android:fitsSystemWindows="false">
+    android:fitsSystemWindows="true">
 
     <!-- ===== APP BAR ===== -->
     <com.google.android.material.appbar.AppBarLayout
@@ -118,13 +118,13 @@
             android:layout_height="48dp"
             android:layout_weight="1"
             android:autofillHints=""
-            android:minHeight="48dp"
+            android:minHeight="30dp"
             android:importantForAccessibility="yes"
             android:hint="Buscar lugar"
             android:inputType="text"
             android:paddingHorizontal="14dp"
             android:textColorHint="#B0B0B0"
-            android:textSize="16sp"
+            android:textSize="13sp"
             android:background="@null" />
 
         <ImageView
@@ -221,7 +221,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
                 app:cardCornerRadius="16dp"
-                app:cardBackgroundColor="#2A2A2A"
+                app:cardBackgroundColor="@color/card_background_dark"
                 app:cardElevation="8dp">
 
                 <LinearLayout
@@ -359,16 +359,15 @@
 
                             <LinearLayout
                                 android:layout_width="match_parent"
-                                android:gravity="start"
-                                android:layout_height="match_parent">
+                                android:gravity="start|center_vertical"
+                                android:layout_height="wrap_content">
 
                                 <ImageView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
+                                    android:layout_width="20dp"
+                                    android:layout_height="20dp"
                                     android:src="@drawable/exp_arrow_upward"
                                     android:contentDescription="arrow_upward"
-                                    android:background="@drawable/circle_bg"
-                                    app:tint="#FFFFFF" />
+                                    app:tint="@color/accent_blue" />
 
                                 <TextView
                                     android:layout_width="wrap_content"
@@ -378,15 +377,14 @@
                                     android:textStyle="bold"
                                     android:textSize="18sp"
                                     android:text="25"
-                                    android:layout_height="match_parent" />
+                                    android:layout_height="wrap_content" />
 
                                 <ImageView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
+                                    android:layout_width="20dp"
+                                    android:layout_height="20dp"
                                     android:src="@drawable/exp_arrow_downward"
                                     android:contentDescription="arrow_downward"
-                                    android:background="@drawable/circle_bg"
-                                    app:tint="#FFFFFF" />
+                                    app:tint="@color/text_secondary" />
                             </LinearLayout>
 
                         </LinearLayout>
@@ -403,7 +401,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
                 app:cardCornerRadius="16dp"
-                app:cardBackgroundColor="#2A2A2A"
+                app:cardBackgroundColor="@color/card_background_dark"
                 app:cardElevation="8dp">
 
                 <LinearLayout
@@ -522,18 +520,17 @@
                                 android:textSize="14sp"
                                 android:lineSpacingExtra="2dp" />
 
-                            <LinearLayout
+                           <LinearLayout
                                 android:layout_width="match_parent"
-                                android:gravity="start"
-                                android:layout_height="match_parent">
+                                android:gravity="start|center_vertical"
+                                android:layout_height="wrap_content">
 
                                 <ImageView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
+                                    android:layout_width="20dp"
+                                    android:layout_height="20dp"
                                     android:src="@drawable/exp_arrow_upward"
                                     android:contentDescription="arrow_upward"
-                                    android:background="@drawable/circle_bg"
-                                    app:tint="#FFFFFF" />
+                                    app:tint="@color/accent_blue" />
 
                                 <TextView
                                     android:layout_width="wrap_content"
@@ -543,15 +540,14 @@
                                     android:textStyle="bold"
                                     android:textSize="18sp"
                                     android:text="38"
-                                    android:layout_height="match_parent" />
+                                    android:layout_height="wrap_content" />
 
                                 <ImageView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
+                                    android:layout_width="20dp"
+                                    android:layout_height="20dp"
                                     android:src="@drawable/exp_arrow_downward"
                                     android:contentDescription="arrow_downward"
-                                    android:background="@drawable/circle_bg"
-                                    app:tint="#FFFFFF" />
+                                    app:tint="@color/text_secondary" />
                             </LinearLayout>
                         </LinearLayout>
                     </LinearLayout>
