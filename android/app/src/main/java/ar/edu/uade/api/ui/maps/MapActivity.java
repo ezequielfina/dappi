@@ -20,7 +20,6 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.appbar.MaterialToolbar;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import ar.edu.uade.api.R;
 
@@ -31,7 +30,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
     private GoogleMap googleMap;
     private FusedLocationProviderClient fusedLocationClient;
-    private FloatingActionButton fabMyLocation;
     private MaterialToolbar toolbar;
 
     @Override
@@ -40,19 +38,17 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         setContentView(R.layout.activity_map);
 
         // Configurar toolbar
-        toolbar = findViewById(R.id.toolbar);
-        toolbar.setNavigationOnClickListener(v -> finish());
-
-        // Configurar FAB
-        fabMyLocation = findViewById(R.id.fabMyLocation);
-        fabMyLocation.setOnClickListener(v -> centerMapOnMyLocation());
+        toolbar = findViewById(R.id.topAppBar);
+        if (toolbar != null) {
+            toolbar.setNavigationOnClickListener(v -> finish());
+        }
 
         // Inicializar FusedLocationProviderClient
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
         // Obtener referencia al mapa
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
+                .findFragmentById(R.id.mapFragment);
         if (mapFragment != null) {
             mapFragment.getMapAsync(this);
         }
@@ -64,7 +60,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
         // Habilitar controles de UI
         googleMap.getUiSettings().setZoomControlsEnabled(true);
-        googleMap.getUiSettings().setMyLocationButtonEnabled(false); // Usamos nuestro FAB
+        googleMap.getUiSettings().setMyLocationButtonEnabled(true); // Usar botón integrado de Google Maps
 
         // Verificar y solicitar permisos de ubicación
         if (hasLocationPermission()) {
@@ -107,8 +103,11 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
     private void enableMyLocation() {
         if (hasLocationPermission() && googleMap != null) {
-            googleMap.setMyLocationEnabled(true);
-            centerMapOnMyLocation();
+            try {
+                googleMap.setMyLocationEnabled(true);
+            } catch (SecurityException e) {
+                Toast.makeText(this, "Error al habilitar ubicación", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
