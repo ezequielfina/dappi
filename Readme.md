@@ -65,11 +65,17 @@ Para facilitar presentaciones con lugares hardcodeados:
 - ✅ Funciona desde cualquier ubicación
 - ℹ️ Los datos GPS se guardan pero no se validan
 
+### 📴 **Sistema Offline** (Noviembre 2025)
+- **Funciona sin internet**: Las reseñas se guardan localmente cuando no hay conexión
+- **Sincronización automática**: Al recuperar conexión, se sincronizan automáticamente
+- **Base de datos local**: Room (SQLite) para almacenamiento persistente
+- **Detector de conectividad**: NetworkManager detecta cambios de red en tiempo real
+- **Indicadores UI**: Muestra estado online/offline claramente al usuario
+- **Repository Pattern**: Abstrae la fuente de datos (local vs remoto)
+
 **Ver documentación completa:**
-- 📄 `CAMERA_FEATURE_IMPLEMENTATION.md` - Detalles técnicos
-- 🚀 `INSTRUCCIONES_PRUEBA.md` - Cómo probar la funcionalidad
-- 📋 `RESUMEN_IMPLEMENTACION.md` - Resumen ejecutivo
-- 🎭 `MODO_DEMO.md` - **Información sobre modo demo**
+- 📄 `DOCUMENTACION_TECNICA_COMPLETA.md` - Documentación completa del proyecto
+- 📴 `FUNCIONALIDAD_OFFLINE.md` - **Detalles de funcionalidad offline**
 
 ---
 

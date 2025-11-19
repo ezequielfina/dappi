@@ -13,15 +13,22 @@ import ar.edu.uade.api.R;
 import ar.edu.uade.api.ui.map.MapActivity;
 import ar.edu.uade.api.ui.places.Place;
 import ar.edu.uade.api.ui.user.ProfileActivity;
+import ar.edu.uade.api.network.NetworkManager;
+import ar.edu.uade.api.repository.ReviewRepository;
 
 public class Home extends AppCompatActivity {
 
     private static final String TAG = "HomeActivity";
+    private NetworkManager networkManager;
+    private ReviewRepository reviewRepository;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+        
+        networkManager = NetworkManager.getInstance(this);
+        reviewRepository = ReviewRepository.getInstance(this);
 
         // Personalizar el saludo
         TextView tvGreeting = findViewById(R.id.tvGreeting);
@@ -76,6 +83,49 @@ public class Home extends AppCompatActivity {
                 return true;
             }
             return false;
+        });
+        
+        // Sincronizar reseñas pendientes si hay conexión
+        syncPendingReviewsIfNeeded();
+    }
+    
+    private void syncPendingReviewsIfNeeded() {
+        if (!networkManager.isConnected()) {
+            int pendingCount = reviewRepository.getPendingReviewsCount();
+            if (pendingCount > 0) {
+                Log.d(TAG, "📴 Sin conexión. " + pendingCount + " reseñas pendientes de sincronizar");
+            }
+            return;
+        }
+        
+        int pendingCount = reviewRepository.getPendingReviewsCount();
+        if (pendingCount == 0) {
+            return; // No hay nada que sincronizar
+        }
+        
+        Log.d(TAG, "🔄 Sincronizando " + pendingCount + " reseñas pendientes...");
+        
+        reviewRepository.syncPendingReviews(new ReviewRepository.SyncCallback() {
+            @Override
+            public void onComplete(int synced, int errors) {
+                runOnUiThread(() -> {
+                    if (synced > 0) {
+                        Toast.makeText(Home.this, 
+                                "✅ " + synced + " reseña(s) sincronizada(s)", 
+                                Toast.LENGTH_LONG).show();
+                    }
+                    if (errors > 0) {
+                        Toast.makeText(Home.this, 
+                                "⚠️ " + errors + " reseña(s) con error", 
+                                Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+            
+            @Override
+            public void onError(String error) {
+                Log.e(TAG, "Error en sincronización: " + error);
+            }
         });
     }
 }

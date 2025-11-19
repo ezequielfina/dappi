@@ -40,6 +40,8 @@ import java.util.Locale;
 
 import ar.edu.uade.api.R;
 import ar.edu.uade.api.network.ApiClient;
+import ar.edu.uade.api.network.NetworkManager;
+import ar.edu.uade.api.repository.ReviewRepository;
 
 public class Review extends AppCompatActivity {
     
@@ -66,8 +68,10 @@ public class Review extends AppCompatActivity {
     private Uri photoUri;
     private File photoFile;
 
-    // API Client
+    // API Client y Repository
     private ApiClient apiClient;
+    private ReviewRepository reviewRepository;
+    private NetworkManager networkManager;
 
     // Place data (esto debería venir del intent en una versión completa)
     private long placeId = 1; // Hardcoded por ahora
@@ -86,8 +90,11 @@ public class Review extends AppCompatActivity {
         setupLocationClient();
         setupPhotoLauncher();
         apiClient = new ApiClient();
+        reviewRepository = ReviewRepository.getInstance(this);
+        networkManager = NetworkManager.getInstance(this);
         checkPermissionsAndValidateLocation();
         setupClickListeners();
+        updateConnectionStatus();
     }
 
     private void initializeViews() {
@@ -153,6 +160,16 @@ public class Review extends AppCompatActivity {
             userLatitude = placeLatitude;
             userLongitude = placeLongitude;
             locationStatus.setText("ℹ️ Modo Demo - Sin validación de ubicación");
+        }
+    }
+    
+    private void updateConnectionStatus() {
+        if (networkManager.isConnected()) {
+            locationStatus.setText("🟢 Online - Reseñas se sincronizan automáticamente");
+            locationStatus.setTextColor(getColor(android.R.color.holo_green_light));
+        } else {
+            locationStatus.setText("📴 Offline - Las reseñas se guardarán localmente");
+            locationStatus.setTextColor(getColor(android.R.color.holo_orange_light));
         }
     }
 
@@ -289,8 +306,8 @@ public class Review extends AppCompatActivity {
         submitButton.setEnabled(false);
         submitButton.setText("ENVIANDO...");
 
-        // Enviar reseña al backend
-        apiClient.sendReviewWithPhoto(
+        // Usar Repository que maneja online/offline automáticamente
+        reviewRepository.createReview(
                 userId,
                 placeId,
                 reviewText,
@@ -298,12 +315,22 @@ public class Review extends AppCompatActivity {
                 userLatitude,
                 userLongitude,
                 photoFile,
-                new ApiClient.ApiCallback() {
+                new ReviewRepository.ReviewCallback() {
                     @Override
-                    public void onSuccess(String response) {
+                    public void onSuccess(String message) {
                         runOnUiThread(() -> {
                             Toast.makeText(Review.this, 
-                                    "✅ Reseña enviada exitosamente!", 
+                                    "✅ " + message, 
+                                    Toast.LENGTH_LONG).show();
+                            finish();
+                        });
+                    }
+
+                    @Override
+                    public void onSavedOffline(String message) {
+                        runOnUiThread(() -> {
+                            Toast.makeText(Review.this, 
+                                    "💾 " + message, 
                                     Toast.LENGTH_LONG).show();
                             finish();
                         });
@@ -313,7 +340,7 @@ public class Review extends AppCompatActivity {
                     public void onError(String error) {
                         runOnUiThread(() -> {
                             Toast.makeText(Review.this, 
-                                    "❌ Error al enviar reseña: " + error, 
+                                    "❌ Error: " + error, 
                                     Toast.LENGTH_LONG).show();
                             submitButton.setEnabled(true);
                             submitButton.setText("ENVIAR");
