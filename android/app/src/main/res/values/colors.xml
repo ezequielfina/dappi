@@ -3,7 +3,7 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     
-    <!-- Colores del diseño TravelGuide -->
+    <!-- Colores del diseño TravelGuide (Login/Register) -->
     <color name="background_dark">#FF2C3E50</color>
     <color name="background_light">#FF34495E</color>
     <color name="accent_blue">#FF3498DB</color>
@@ -14,4 +14,15 @@
     <color name="input_background">#FF2C3E50</color>
     <color name="button_primary">#FF3498DB</color>
     <color name="button_secondary">#FF2C3E50</color>
+    
+    <!-- Colores para Places -->
+    <color name="colorPrimaryDark">#031f2b</color>
+    <color name="textColorSecondary">#B0B0B0</color>
+    <color name="accentBlue">#4A90E2</color>
+    <color name="statusOpenGreen">#4CAF50</color>
+    <color name="buttonInactiveBackground">#2A2A2A</color>
+    <color name="bottomNavBackground">#1F3A47</color>
+    <color name="iconActive">#5edfff</color>
+    <color name="iconInactive">#B0B0B0</color>
+    <color name="starOrange">#FFC107</color> <!-- Added for RatingBar -->
 </resources>
