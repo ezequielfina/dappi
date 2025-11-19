@@ -2,6 +2,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
     
+    <!-- Permisos para Google Maps -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -11,6 +16,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Api">
+        
+        <!-- Google Maps API Key -->
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyCQi2ewYbxlK8D_ADcrH2TKiLBL6cyQei0" />
         
         <!-- Activity de lanzamiento principal -->
         <activity
@@ -60,7 +70,10 @@
         <activity android:name="ar.edu.uade.api.ui.user.ProfileConfigActivity"
             android:exported="false"
             android:theme="@style/Theme.Api"/>
-
+        <activity
+            android:name="ar.edu.uade.api.ui.maps.MapActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Api" />
 
     </application>
 </manifest>
