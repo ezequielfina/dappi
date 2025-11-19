@@ -24,5 +24,8 @@
     <color name="bottomNavBackground">#1F3A47</color>
     <color name="iconActive">#5edfff</color>
     <color name="iconInactive">#B0B0B0</color>
-    <color name="starOrange">#FFC107</color> <!-- Added for RatingBar -->
+    
+    <!-- Colores para Home -->
+    <color name="muted">#B5C6CC</color>
+    <color name="starOrange">#FFFD6F22</color>
 </resources>
