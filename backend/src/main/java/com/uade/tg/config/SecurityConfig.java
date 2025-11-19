@@ -27,7 +27,7 @@ public class SecurityConfig {
                         // Endpoints públicos (registro y login)
                         .requestMatchers("/api/v1/auth/**").permitAll()
                         // TODO: Podés agregar otras rutas públicas si querés
-                        //.requestMatchers("/api/v1/places/**").permitAll()
+                        .requestMatchers("/health/**").permitAll()
                         .anyRequest().authenticated()
                 )
 
