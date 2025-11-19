@@ -1,4 +1,4 @@
-package ar.edu.uade.api.network;
+package data.network;
 
 import android.content.Context;
 import android.net.ConnectivityManager;

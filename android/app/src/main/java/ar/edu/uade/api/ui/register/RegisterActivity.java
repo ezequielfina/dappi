@@ -14,6 +14,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import ar.edu.uade.api.R;
 import ar.edu.uade.api.ui.login.LoginActivity;
 import ar.edu.uade.api.ui.onboarding.OnboardingActivity;
+import data.session.SessionManager;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+import data.api.AuthApi;
+import data.api.RetrofitClient;
+import data.dto.AuthenticationResponse;
+import data.dto.RegisterRequest;
 
 public class RegisterActivity extends AppCompatActivity {
 
@@ -25,11 +34,11 @@ public class RegisterActivity extends AppCompatActivity {
     private Button btnRegister;
     private Button btnSignup;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
-
         initializeViews();
         setupClickListeners();
     }
@@ -45,7 +54,6 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void setupClickListeners() {
-        // Botón Registrarse - Valida y registra usuario
         btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -55,7 +63,6 @@ public class RegisterActivity extends AppCompatActivity {
             }
         });
 
-        // Botón ¿Tienes cuenta? - Navega a Login
         btnSignup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -69,7 +76,6 @@ public class RegisterActivity extends AppCompatActivity {
     private boolean validateForm() {
         boolean isValid = true;
 
-        // Validar nombre
         if (TextUtils.isEmpty(etName.getText().toString().trim())) {
             etName.setError("El nombre es requerido");
             isValid = false;
@@ -78,7 +84,6 @@ public class RegisterActivity extends AppCompatActivity {
             isValid = false;
         }
 
-        // Validar email
         if (TextUtils.isEmpty(etEmail.getText().toString().trim())) {
             etEmail.setError("El email es requerido");
             isValid = false;
@@ -87,7 +92,6 @@ public class RegisterActivity extends AppCompatActivity {
             isValid = false;
         }
 
-        // Validar teléfono
         if (TextUtils.isEmpty(etPhone.getText().toString().trim())) {
             etPhone.setError("El teléfono es requerido");
             isValid = false;
@@ -96,7 +100,6 @@ public class RegisterActivity extends AppCompatActivity {
             isValid = false;
         }
 
-        // Validar contraseña
         if (TextUtils.isEmpty(etPassword.getText().toString())) {
             etPassword.setError("La contraseña es requerida");
             isValid = false;
@@ -105,7 +108,6 @@ public class RegisterActivity extends AppCompatActivity {
             isValid = false;
         }
 
-        // Validar confirmación de contraseña
         if (TextUtils.isEmpty(etConfirmPassword.getText().toString())) {
             etConfirmPassword.setError("Confirma tu contraseña");
             isValid = false;
@@ -118,42 +120,81 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void registerUser() {
-        // Aquí iría la lógica de registro con el backend
-        // Por ahora simulamos un registro exitoso
-        
-        String name = etName.getText().toString().trim();
-        String email = etEmail.getText().toString().trim();
-        String phone = etPhone.getText().toString().trim();
-        String password = etPassword.getText().toString();
+        RegisterRequest request = new RegisterRequest(
+                etName.getText().toString().trim(),
+                etEmail.getText().toString().trim(),
+                etPhone.getText().toString().trim(),
+                etPassword.getText().toString(),
+                etConfirmPassword.getText().toString()
+        );
 
-        // Simular llamada al backend
-        showLoading(true);
-        
-        // Simular delay de red
-        new android.os.Handler().postDelayed(new Runnable() {
+        AuthApi api = RetrofitClient.getClient().create(AuthApi.class);
+
+        api.register(request).enqueue(new Callback<AuthenticationResponse>() {
             @Override
-            public void run() {
-                showLoading(false);
-                
-                // Simular registro exitoso
-                Toast.makeText(RegisterActivity.this, 
-                    "¡Registro exitoso! Bienvenido " + name, 
-                    Toast.LENGTH_SHORT).show();
-                
-                // Navegar al onboarding
-                Intent intent = new Intent(RegisterActivity.this, OnboardingActivity.class);
-                intent.putExtra("user_name", name);
-                intent.putExtra("user_email", email);
-                startActivity(intent);
-                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
-                finish();
-            }
-        }, 2000);
-    }
+            public void onResponse(Call<AuthenticationResponse> call, Response<AuthenticationResponse> response) {
+                if (response.isSuccessful() && response.body() != null) {
 
-    private void showLoading(boolean show) {
-        btnRegister.setEnabled(!show);
-        btnRegister.setText(show ? "Registrando..." : "Registrarse");
+                    AuthenticationResponse authResponse = response.body();
+                    String token = authResponse.getToken();
+
+
+                    SessionManager sessionManager = SessionManager.getInstance(RegisterActivity.this);
+                    sessionManager.saveSession(
+                            token,
+                            null,
+                            etName.getText().toString().trim(),
+                            etEmail.getText().toString().trim()
+                    );
+
+                    String userName = etName.getText().toString().trim();
+                    String userEmail = etEmail.getText().toString().trim();
+
+                    Toast.makeText(
+                            RegisterActivity.this,
+                            "¡Registro exitoso! Completa tu perfil",
+                            Toast.LENGTH_LONG
+                    ).show();
+
+
+                    Intent intent = new Intent(RegisterActivity.this, OnboardingActivity.class);
+                    intent.putExtra("user_name", userName);
+                    intent.putExtra("user_email", userEmail);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(intent);
+                    overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+                    finish();
+
+                } else {
+                    String errorMsg = "Error: " + response.code();
+
+                    try {
+                        if (response.errorBody() != null) {
+                            errorMsg = response.errorBody().string();
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                    Toast.makeText(
+                            RegisterActivity.this,
+                            errorMsg,
+                            Toast.LENGTH_LONG
+                    ).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<AuthenticationResponse> call, Throwable t) {
+                Toast.makeText(
+                        RegisterActivity.this,
+                        "Error de conexión: " + t.getMessage(),
+                        Toast.LENGTH_LONG
+                ).show();
+
+                t.printStackTrace();
+            }
+        });
     }
 
     @Override

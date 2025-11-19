@@ -1,4 +1,4 @@
-package ar.edu.uade.api.network;
+package data.network;
 
 import android.util.Log;
 
@@ -11,7 +11,6 @@ import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.nio.charset.StandardCharsets;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 

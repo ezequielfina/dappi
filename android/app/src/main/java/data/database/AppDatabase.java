@@ -1,4 +1,4 @@
-package ar.edu.uade.api.database;
+package data.database;
 
 import android.content.Context;
 
@@ -6,10 +6,10 @@ import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
-import ar.edu.uade.api.database.dao.PlaceDao;
-import ar.edu.uade.api.database.dao.ReviewDao;
-import ar.edu.uade.api.database.entity.PlaceEntity;
-import ar.edu.uade.api.database.entity.ReviewEntity;
+import data.database.dao.PlaceDao;
+import data.database.dao.ReviewDao;
+import data.database.entity.PlaceEntity;
+import data.database.entity.ReviewEntity;
 
 @Database(entities = {PlaceEntity.class, ReviewEntity.class}, version = 1, exportSchema = false)
 public abstract class AppDatabase extends RoomDatabase {

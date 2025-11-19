@@ -7,10 +7,7 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" 
-        android:maxSdkVersion="32" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"
-        android:maxSdkVersion="32" />
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES"/>
     
     <uses-feature android:name="android.hardware.camera" android:required="false" />
 
@@ -22,7 +19,9 @@
         android:label="TravelGuide"
         android:roundIcon="@drawable/logo"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Api">
+        android:theme="@style/Theme.Api"
+        android:usesCleartextTraffic="true">
+
 
         <!-- Google Maps API Key -->
         <meta-data
@@ -54,10 +53,6 @@
             android:exported="false"
             android:theme="@style/Theme.Api" />
 
-        <activity
-            android:name="ar.edu.uade.api.ui.home.Explore"
-            android:exported="false"
-            android:theme="@style/Theme.Api" />
 
         <activity
             android:name="ar.edu.uade.api.ui.home.Home"
@@ -104,6 +99,15 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="ar.edu.uade.api.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
     </application>
 
 </manifest>

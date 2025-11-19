@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -29,19 +28,18 @@ import androidx.core.content.FileProvider;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.tasks.OnSuccessListener;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
 import ar.edu.uade.api.R;
-import ar.edu.uade.api.network.ApiClient;
-import ar.edu.uade.api.network.NetworkManager;
-import ar.edu.uade.api.repository.ReviewRepository;
+import data.network.ApiClient;
+import data.network.NetworkManager;
+import data.repository.ReviewRepository;
+import data.repository.callback.ReviewCallback;
 
 public class Review extends AppCompatActivity {
     
@@ -288,7 +286,7 @@ public class Review extends AppCompatActivity {
 
     private void submitReview() {
         // MODO DEMO: No validar ubicación, siempre permitir envío
-        
+
         float rating = ratingBar.getRating();
         String reviewText = reviewEditText.getText().toString().trim();
 
@@ -315,12 +313,12 @@ public class Review extends AppCompatActivity {
                 userLatitude,
                 userLongitude,
                 photoFile,
-                new ReviewRepository.ReviewCallback() {
+                new ReviewCallback() {
                     @Override
                     public void onSuccess(String message) {
                         runOnUiThread(() -> {
-                            Toast.makeText(Review.this, 
-                                    "✅ " + message, 
+                            Toast.makeText(Review.this,
+                                    "✅ " + message,
                                     Toast.LENGTH_LONG).show();
                             finish();
                         });
@@ -329,8 +327,8 @@ public class Review extends AppCompatActivity {
                     @Override
                     public void onSavedOffline(String message) {
                         runOnUiThread(() -> {
-                            Toast.makeText(Review.this, 
-                                    "💾 " + message, 
+                            Toast.makeText(Review.this,
+                                    "💾 " + message,
                                     Toast.LENGTH_LONG).show();
                             finish();
                         });
@@ -339,8 +337,8 @@ public class Review extends AppCompatActivity {
                     @Override
                     public void onError(String error) {
                         runOnUiThread(() -> {
-                            Toast.makeText(Review.this, 
-                                    "❌ Error: " + error, 
+                            Toast.makeText(Review.this,
+                                    "❌ Error: " + error,
                                     Toast.LENGTH_LONG).show();
                             submitButton.setEnabled(true);
                             submitButton.setText("ENVIAR");
@@ -348,7 +346,6 @@ public class Review extends AppCompatActivity {
                     }
                 });
     }
-
     // ========== PERMISSIONS CALLBACK ==========
 
     @Override
