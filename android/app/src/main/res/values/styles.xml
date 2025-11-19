@@ -85,4 +85,18 @@
         <item name="colorControlNormal">@color/text_primary</item>
         <item name="android:textColorPrimary">@color/text_primary</item>
     </style>
+
+    <!-- Estilo para diálogos oscuros (CORRECCIÓN DEFINITIVA) -->
+    <style name="AlertDialog.Dark" parent="ThemeOverlay.MaterialComponents.Dialog.Alert">
+        <item name="colorSurface">@color/card_background_dark</item>
+        <item name="android:textColorPrimary">@color/text_primary</item>
+        <item name="android:textColorSecondary">@color/text_secondary</item>
+        <item name="buttonBarPositiveButtonStyle">@style/AlertDialog.Button</item>
+        <item name="buttonBarNegativeButtonStyle">@style/AlertDialog.Button</item>
+    </style>
+
+    <style name="AlertDialog.Button" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
+        <item name="android:textColor">@color/accent_blue</item>
+    </style>
+
 </resources>
