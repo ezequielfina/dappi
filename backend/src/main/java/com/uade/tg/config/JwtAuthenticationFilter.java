@@ -22,8 +22,8 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-    private final JwtService jwtService;                 // Servicio que parsea/valida el JWT
-    private final UserDetailsService userDetailsService; // Tu implementación de UserDetailsService
+    private final JwtService jwtService;
+    private final UserDetailsService userDetailsService;
 
     @Override
     protected void doFilterInternal(@NonNull HttpServletRequest request,
@@ -33,13 +33,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         final String authHeader = request.getHeader("Authorization");
 
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            // No hay token, sigo la cadena
             filterChain.doFilter(request, response);
             return;
         }
 
         final String jwt = authHeader.substring(7);
-        final String username = jwtService.extractUserName(jwt); // <-- usa "subject" o claim de email/username
+        final String username = jwtService.extractUserName(jwt);
 
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);

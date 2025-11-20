@@ -24,10 +24,8 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
 
                 .authorizeHttpRequests(auth -> auth
-                        // Endpoints públicos (registro y login)
                         .requestMatchers("/api/v1/auth/**").permitAll()
                         .requestMatchers("/api/v1/users/onboarding").permitAll()
-                        // TODO: Podés agregar otras rutas públicas si queré
                         .anyRequest().authenticated()
                 )
 

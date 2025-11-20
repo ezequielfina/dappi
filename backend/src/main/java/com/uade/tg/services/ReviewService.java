@@ -42,7 +42,6 @@ public class ReviewService {
     public ReviewResponseDTO getReviewMostUpByUser(Long userId) {
         Review review = reviewRepository.findFirstByUserIdOrderByReviewVotesDesc(userId);
         if (review == null) {
-            // Retorna NULL si no hay reseña, lo que indica que el usuario no tiene ninguna.
             return null;
         }
 
@@ -149,13 +148,11 @@ public class ReviewService {
             if (vote.getVoteType() == VoteType.UPVOTE) {
                 throw new IllegalStateException("Ya diste upvote a esta review");
             } else {
-                // Cambiar downvote -> upvote
                 vote.setVoteType(VoteType.UPVOTE);
                 reviewVoteRepository.save(vote);
-                review.setReviewVotes(review.getReviewVotes() + 2); // de -1 a +1
+                review.setReviewVotes(review.getReviewVotes() + 2);
             }
         } else {
-            // Crear nuevo upvote
             ReviewVote newVote = new ReviewVote();
             newVote.setUserId(userId);
             newVote.setReviewId(reviewId);
@@ -193,7 +190,6 @@ public class ReviewService {
                 review.setReviewVotes(review.getReviewVotes() - 2);
             }
         } else {
-            // Crear nuevo downvote
             ReviewVote newVote = new ReviewVote();
             newVote.setUserId(userId);
             newVote.setReviewId(reviewId);

@@ -28,5 +28,5 @@ public class ReviewVote {
     private Long reviewId;
 
     @Enumerated(EnumType.STRING)
-    private VoteType voteType; // <-- NUEVO campo
+    private VoteType voteType;
 }

@@ -27,21 +27,14 @@ public class DataInitializer {
     ) {
         return args -> {
 
-            // =====================
-            // 1) Crear usuario dummy
-            // =====================
             User demoUser = User.builder()
                     .email("demo@demo.com")
                     .userName("DemoUser")
                     .profilePictureUrl("https://images.unsplash.com/photo-1603415526960-f7e0328c63b1?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D")
-                    .password(passwordEncoder.encode("123456"))  //
+                    .password(passwordEncoder.encode("123456"))
                     .build();
 
             userRepository.save(demoUser);
-
-            // =====================
-            // 2) Crear PLACES
-            // =====================
 
             Place place1 = Place.builder()
                     .name("Café Central")
@@ -74,10 +67,6 @@ public class DataInitializer {
                     .build();
 
             placeRepository.saveAll(Arrays.asList(place1, place2, place3));
-
-            // =====================
-            // 3) Crear REVIEWS
-            // =====================
 
             Review r1 = Review.builder()
                     .description("Excelente café y atención muy amable.")

@@ -43,13 +43,11 @@ public class UserService {
         Optional<User> userOptional = userRepository.findByEmail(email);
 
         if (userOptional.isEmpty()) {
-            // Maneja el caso en que el usuario no existe (aunque no es la causa del NPE actual)
             return null;
         }
 
         User user = userOptional.get();
 
-        // El método de servicio ahora puede devolver null
         ReviewResponseDTO reviewResponseDTO = reviewService.getReviewMostUpByUser(user.getId());
 
         int cantResenas = reviewService.getReviewsByUser(user.getId()).size();
@@ -62,7 +60,6 @@ public class UserService {
                 .resenasRealizadas(cantResenas)
                 .upvotes(sumUpvotes)
                 .profilePictureUrl(user.getProfilePictureUrl())
-                // Si reviewResponseDTO es null, se establece como null aquí
                 .reviewMasVotada(reviewResponseDTO)
                 .build();
     }
