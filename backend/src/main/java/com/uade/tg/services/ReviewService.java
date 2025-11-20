@@ -33,6 +33,15 @@ public class ReviewService {
         this.reviewVoteRepository = reviewVoteRepository;
     }
 
+    public ReviewResponseDTO getReviewMostUpByUser(Long userId) {
+        Review review = reviewRepository.findFirstByUserIdOrderByReviewVotesDesc(userId);
+        return ReviewResponseDTO.builder()
+                .id(review.getId())
+                .description(review.getDescription())
+                .reviewVotes(review.getReviewVotes())
+                .build();
+    }
+
     public Review createReview(CreateReviewRequestDTO req, User user) {
         Place place = placeRepository.findById(req.getPlaceId())
                 .orElseThrow(() -> new RuntimeException("Place not found"));

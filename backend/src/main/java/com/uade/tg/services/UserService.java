@@ -2,7 +2,9 @@ package com.uade.tg.services;
 
 
 import com.uade.tg.dto.FirstRegisterDTO;
+import com.uade.tg.dto.ReviewResponseDTO;
 import com.uade.tg.dto.UpdateUserProfileDTO;
+import com.uade.tg.dto.UserMeDTO;
 import com.uade.tg.entities.Review;
 import com.uade.tg.entities.User;
 import com.uade.tg.repositories.UserRepository;
@@ -19,10 +21,12 @@ public class UserService {
     @Autowired
     private final UserRepository userRepository;
 
+    @Autowired
+    private final ReviewService reviewService;
 
-
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, ReviewService reviewService) {
         this.userRepository = userRepository;
+        this.reviewService = reviewService;
     }
 
 
@@ -35,6 +39,19 @@ public class UserService {
 
     }
 
+    public UserMeDTO findUserDtoByEmail(String email) {
+        Optional<User> userOptional = userRepository.findByEmail(email);
+        ReviewResponseDTO reviewResponseDTO = reviewService.getReviewMostUpByUser(userOptional.get().getId());
+        int cantResenas = reviewService.getReviewsByUser(userOptional.get().getId()).size();
+
+        return userOptional.map(user -> UserMeDTO.builder()
+                .id(user.getId())
+                .email(user.getEmail())
+                .userName(user.getUserName())
+                .resenasRealizadas(cantResenas)
+                .reviewMasVotada(reviewResponseDTO)
+                .build()).orElse(null);
+    }
 
     public Optional<User> onBoardingPage(Long userId, FirstRegisterDTO req) {
         User user = userRepository.findById(userId)

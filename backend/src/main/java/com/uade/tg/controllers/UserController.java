@@ -39,17 +39,13 @@ public class UserController {
             @RequestBody FirstRegisterDTO request) {
         return ResponseEntity.ok(userService.onBoardingPage(user.getId(),request));
     }
+
     @GetMapping("/me")
     public ResponseEntity<UserMeDTO> getProfile(@AuthenticationPrincipal User user) {
 
-        Optional<User> dbUser = userService.findUserByEmail(user.getEmail());
+        UserMeDTO dbUser = userService.findUserDtoByEmail(user.getEmail());
 
-        UserMeDTO dto = new UserMeDTO(
-                dbUser.get().getId(),
-                dbUser.get().getUserName(),
-                dbUser.get().getEmail()
-        );
-        return ResponseEntity.ok(dto);
+        return ResponseEntity.ok(dbUser);
     }
 
 

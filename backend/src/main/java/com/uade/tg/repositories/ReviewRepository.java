@@ -17,4 +17,6 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
     @Query("SELECT r FROM Review r WHERE r.user.id = :userId ORDER BY r.reviewVotes DESC")
     List<Review> findAllReviewsByUser(@Param("userId") Long userId);
 
+    Review findFirstByUserIdOrderByReviewVotesDesc(Long userId);
+
 }
