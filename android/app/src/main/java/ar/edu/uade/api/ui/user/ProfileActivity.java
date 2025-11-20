@@ -65,18 +65,6 @@ public class ProfileActivity extends AppCompatActivity {
 
     // Método separado para la configuración de RecyclerViews
     private void setupRecyclerViews() {
-        // ---------- SECCIÓN FAVORITOS ----------
-        List<Integer> favoriteImages = new ArrayList<>();
-        favoriteImages.add(R.drawable.ic_park_foreground);
-        // ... (resto de imágenes) ...
-
-        FavoritesAdapter favoritesAdapter = new FavoritesAdapter(this, favoriteImages);
-        LinearLayoutManager favoritesNoScrollLM =
-                new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false) {
-                    @Override public boolean canScrollHorizontally() { return false; }
-                };
-        binding.rvFavorites.setLayoutManager(favoritesNoScrollLM);
-        binding.rvFavorites.setAdapter(favoritesAdapter);
 
         // ---------- SECCIÓN BANDERAS ----------
         List<Integer> flagImages = new ArrayList<>();
