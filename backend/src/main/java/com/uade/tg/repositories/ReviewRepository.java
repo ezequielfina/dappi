@@ -22,4 +22,6 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
 
     Review findFirstByUserIdOrderByReviewVotesDesc(Long userId);
 
+    @Query("SELECT COALESCE(SUM(r.reviewVotes), 0) FROM Review r WHERE r.user.id = :userId")
+    Integer sumReviewVotesByUserId(@Param("userId") Long userId);
 }

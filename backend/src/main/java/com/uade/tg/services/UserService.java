@@ -53,12 +53,14 @@ public class UserService {
         ReviewResponseDTO reviewResponseDTO = reviewService.getReviewMostUpByUser(user.getId());
 
         int cantResenas = reviewService.getReviewsByUser(user.getId()).size();
+        Integer sumUpvotes = reviewService.getSumUpvotesByUserId(user.getId());
 
         return UserMeDTO.builder()
                 .id(user.getId())
                 .email(user.getEmail())
                 .userName(user.getUserName())
                 .resenasRealizadas(cantResenas)
+                .upvotes(sumUpvotes)
                 .profilePictureUrl(user.getProfilePictureUrl())
                 // Si reviewResponseDTO es null, se establece como null aquí
                 .reviewMasVotada(reviewResponseDTO)

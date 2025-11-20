@@ -33,6 +33,10 @@ public class ReviewService {
         this.reviewVoteRepository = reviewVoteRepository;
     }
 
+    public Integer getSumUpvotesByUserId(Long userId) {
+        return this.reviewRepository.sumReviewVotesByUserId(userId);
+    }
+
     public ReviewResponseDTO getReviewMostUpByUser(Long userId) {
         Review review = reviewRepository.findFirstByUserIdOrderByReviewVotesDesc(userId);
         if (review == null) {
