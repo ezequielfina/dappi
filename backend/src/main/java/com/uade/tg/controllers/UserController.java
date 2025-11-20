@@ -42,7 +42,7 @@ public class UserController {
 
     @GetMapping("/me")
     public ResponseEntity<UserMeDTO> getProfile(@AuthenticationPrincipal User user) {
-
+        System.out.println("1");
         UserMeDTO dbUser = userService.findUserDtoByEmail(user.getEmail());
 
         return ResponseEntity.ok(dbUser);

@@ -35,6 +35,11 @@ public class ReviewService {
 
     public ReviewResponseDTO getReviewMostUpByUser(Long userId) {
         Review review = reviewRepository.findFirstByUserIdOrderByReviewVotesDesc(userId);
+        if (review == null) {
+            // Retorna NULL si no hay reseña, lo que indica que el usuario no tiene ninguna.
+            return null;
+        }
+
         return ReviewResponseDTO.builder()
                 .id(review.getId())
                 .description(review.getDescription())

@@ -41,16 +41,27 @@ public class UserService {
 
     public UserMeDTO findUserDtoByEmail(String email) {
         Optional<User> userOptional = userRepository.findByEmail(email);
-        ReviewResponseDTO reviewResponseDTO = reviewService.getReviewMostUpByUser(userOptional.get().getId());
-        int cantResenas = reviewService.getReviewsByUser(userOptional.get().getId()).size();
 
-        return userOptional.map(user -> UserMeDTO.builder()
+        if (userOptional.isEmpty()) {
+            // Maneja el caso en que el usuario no existe (aunque no es la causa del NPE actual)
+            return null;
+        }
+
+        User user = userOptional.get();
+
+        // El método de servicio ahora puede devolver null
+        ReviewResponseDTO reviewResponseDTO = reviewService.getReviewMostUpByUser(user.getId());
+
+        int cantResenas = reviewService.getReviewsByUser(user.getId()).size();
+
+        return UserMeDTO.builder()
                 .id(user.getId())
                 .email(user.getEmail())
                 .userName(user.getUserName())
                 .resenasRealizadas(cantResenas)
+                // Si reviewResponseDTO es null, se establece como null aquí
                 .reviewMasVotada(reviewResponseDTO)
-                .build()).orElse(null);
+                .build();
     }
 
     public Optional<User> onBoardingPage(Long userId, FirstRegisterDTO req) {
