@@ -31,7 +31,6 @@ public class ReviewRequest {
         this.userLongitude = userLongitude;
     }
 
-    // Getters y Setters
     public Long getUserId() { return userId; }
     public void setUserId(Long userId) { this.userId = userId; }
 

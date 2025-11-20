@@ -28,7 +28,6 @@ public class Review {
     @Column(nullable = false)
     private Integer reviewVotes;
 
-    // Ubicación GPS del usuario al momento de crear la reseña (para validación)
     @Column(name = "user_latitude")
     private Double userLatitude;
 

@@ -1,7 +1,7 @@
 package com.uade.tg.services;
 
 import com.uade.tg.config.JwtService;
-import com.uade.tg.entities.User; // YOUR User entity, not Spring's!
+import com.uade.tg.entities.User;
 import com.uade.tg.entities.auth.AuthenticationRequest;
 import com.uade.tg.entities.auth.AuthenticationResponse;
 import com.uade.tg.entities.auth.RegisterRequest;

@@ -53,11 +53,6 @@ public class ReviewRepository {
         this.authToken = token;
     }
 
-    /**
-     * Crear reseña con soporte offline
-     * Si hay conexión → envía al backend
-     * Si no hay conexión → guarda localmente para sincronizar después
-     */
     public void createReview(
             Long userId,
             Long placeId,
@@ -68,7 +63,6 @@ public class ReviewRepository {
             File photoFile,
             ReviewCallback callback
     ) {
-        // Crear entidad local
         ReviewEntity review = new ReviewEntity();
         review.setUserId(userId);
         review.setPlaceId(placeId);
@@ -83,12 +77,10 @@ public class ReviewRepository {
         }
 
         if (networkManager.isConnected() && authToken != null) {
-            // CON CONEXIÓN: Enviar al backend usando Retrofit
             Log.d(TAG, "🟢 Online: Enviando reseña al backend");
             sendReviewToBackend(userId, placeId, description, rating,
                     latitude, longitude, photoFile, review, callback);
         } else {
-            // SIN CONEXIÓN: Guardar localmente
             Log.d(TAG, "🔴 Offline: Guardando reseña localmente");
             review.setSynced(false);
             long localId = database.reviewDao().insert(review);
@@ -98,9 +90,6 @@ public class ReviewRepository {
         }
     }
 
-    /**
-     * Enviar reseña al backend usando Retrofit
-     */
     private void sendReviewToBackend(
             Long userId, Long placeId, String description, int rating,
             double latitude, double longitude, File photoFile,
@@ -109,11 +98,9 @@ public class ReviewRepository {
         ReviewApi api = RetrofitClient.getReviewApi(authToken);
 
         if (photoFile != null && photoFile.exists()) {
-            // CON FOTO: Usar multipart
             sendReviewWithPhoto(api, userId, placeId, description, rating,
                     latitude, longitude, photoFile, localReview, callback);
         } else {
-            // SIN FOTO: JSON simple
             ReviewRequest request = new ReviewRequest(
                     userId, placeId, description, rating, latitude, longitude
             );
@@ -122,7 +109,6 @@ public class ReviewRepository {
                 @Override
                 public void onResponse(Call<ReviewResponse> call, Response<ReviewResponse> response) {
                     if (response.isSuccessful() && response.body() != null) {
-                        // Guardar en BD local como sincronizada
                         localReview.setSynced(true);
                         localReview.setRemoteId(response.body().getId());
                         database.reviewDao().insert(localReview);
@@ -142,15 +128,11 @@ public class ReviewRepository {
         }
     }
 
-    /**
-     * Enviar reseña con foto usando multipart
-     */
     private void sendReviewWithPhoto(
             ReviewApi api, Long userId, Long placeId, String description,
             int rating, double latitude, double longitude, File photoFile,
             ReviewEntity localReview, ReviewCallback callback
     ) {
-        // Crear JSON de la reseña
         ReviewRequest reviewRequest = new ReviewRequest(
                 userId, placeId, description, rating, latitude, longitude
         );
@@ -159,7 +141,6 @@ public class ReviewRepository {
                 MediaType.parse("application/json"), reviewJson
         );
 
-        // Crear parte de la foto
         List<MultipartBody.Part> photoParts = new ArrayList<>();
         RequestBody photoBody = RequestBody.create(
                 MediaType.parse("image/jpeg"), photoFile
@@ -169,7 +150,6 @@ public class ReviewRepository {
         );
         photoParts.add(photoPart);
 
-        // Enviar
         api.createReviewWithPhotos(reviewBody, photoParts)
                 .enqueue(new Callback<ReviewResponse>() {
                     @Override
@@ -193,9 +173,6 @@ public class ReviewRepository {
                 });
     }
 
-    /**
-     * Manejar error del backend: guardar localmente para sincronizar después
-     */
     private void handleBackendError(ReviewEntity localReview, ReviewCallback callback) {
         localReview.setSynced(false);
         database.reviewDao().insert(localReview);
@@ -204,17 +181,10 @@ public class ReviewRepository {
                 "Reseña guardada. Se sincronizará cuando haya conexión.");
     }
 
-    /**
-     * 👇 MÉTODO ACTUALIZADO: Obtener reseñas de un lugar CON ORDENAMIENTO
-     * @param placeId ID del lugar
-     * @param sortBy "best", "worst", o "latest"
-     * @param callback Callback con la lista de reseñas
-     */
     public void getReviewsByPlace(Long placeId, String sortBy, ReviewListCallback callback) {
         if (networkManager.isConnected() && authToken != null) {
             ReviewApi api = RetrofitClient.getReviewApi(authToken);
 
-            // 👇 USAR EL MÉTODO CON PARÁMETRO sortBy
             api.getReviewsByPlace(placeId, sortBy).enqueue(new Callback<List<ReviewResponse>>() {
                 @Override
                 public void onResponse(Call<List<ReviewResponse>> call, Response<List<ReviewResponse>> response) {
@@ -239,31 +209,22 @@ public class ReviewRepository {
         }
     }
 
-    /**
-     * 👇 NUEVO SOBRECARGA: Método sin sortBy para compatibilidad (default "best")
-     */
     public void getReviewsByPlace(Long placeId, ReviewListCallback callback) {
         getReviewsByPlace(placeId, "best", callback);
     }
 
-    /**
-     * 👇 MÉTODO ACTUALIZADO: Usar caché local con ordenamiento
-     */
     private void useLocalCache(Long placeId, String sortBy, ReviewListCallback callback) {
         List<ReviewEntity> localReviews;
 
         switch (sortBy.toLowerCase()) {
             case "worst":
-                // Peor reseña: menor rating primero
                 localReviews = database.reviewDao().getReviewsByPlaceOrderByRatingAsc(placeId);
                 break;
             case "latest":
-                // Última reseña: más reciente primero
                 localReviews = database.reviewDao().getReviewsByPlaceOrderByDateDesc(placeId);
                 break;
             case "best":
             default:
-                // Mejor reseña: mayor rating primero
                 localReviews = database.reviewDao().getReviewsByPlaceOrderByRatingDesc(placeId);
                 break;
         }
@@ -273,9 +234,6 @@ public class ReviewRepository {
         callback.onLocalData(localReviews);
     }
 
-    /**
-     * Sincronizar todas las reseñas pendientes
-     */
     public void syncPendingReviews(SyncCallback callback) {
         if (!networkManager.isConnected() || authToken == null) {
             callback.onError("Sin conexión o sin autenticación");
@@ -290,7 +248,6 @@ public class ReviewRepository {
             return;
         }
 
-        // Contador para tracking
         final int[] syncedCount = {0};
         final int[] errorCount = {0};
         final int totalReviews = pendingReviews.size();

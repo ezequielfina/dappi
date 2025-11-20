@@ -17,8 +17,7 @@ import java.util.concurrent.Executors;
 public class ApiClient {
     
     private static final String TAG = "ApiClient";
-    private static final String BASE_URL = "http://travel-guide.us-east-1.elasticbeanstalk.com"; // Para emulador Android
-    // private static final String BASE_URL = "http://localhost:8080"; // Para dispositivo físico, usar IP de tu PC
+    private static final String BASE_URL = "http://travel-guide.us-east-1.elasticbeanstalk.com";
     
     private final ExecutorService executorService;
     
@@ -26,9 +25,6 @@ public class ApiClient {
         this.executorService = Executors.newFixedThreadPool(4);
     }
     
-    /**
-     * Envía una reseña con foto al backend
-     */
     public void sendReviewWithPhoto(long userId, long placeId, String description, 
                                    int rating, double latitude, double longitude,
                                    File photoFile, ApiCallback callback) {
@@ -45,7 +41,6 @@ public class ApiClient {
                 
                 DataOutputStream outputStream = new DataOutputStream(connection.getOutputStream());
                 
-                // Agregar JSON de la reseña
                 JSONObject reviewJson = new JSONObject();
                 reviewJson.put("userId", userId);
                 reviewJson.put("placeId", placeId);
@@ -60,7 +55,6 @@ public class ApiClient {
                 outputStream.writeBytes(reviewJson.toString());
                 outputStream.writeBytes("\r\n");
                 
-                // Agregar foto si existe
                 if (photoFile != null && photoFile.exists()) {
                     outputStream.writeBytes("--" + boundary + "\r\n");
                     outputStream.writeBytes("Content-Disposition: form-data; name=\"photos\"; filename=\"" + 
@@ -119,9 +113,6 @@ public class ApiClient {
         });
     }
     
-    /**
-     * Interface para callbacks de la API
-     */
     public interface ApiCallback {
         void onSuccess(String response);
         void onError(String error);

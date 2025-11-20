@@ -1,4 +1,4 @@
-package ar.edu.uade.api.ui.utils;  // Ajusta el paquete según tu estructura
+package ar.edu.uade.api.ui.utils;
 
 import android.content.Context;
 import android.util.Log;
@@ -6,7 +6,7 @@ import android.widget.Toast;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import ar.edu.uade.api.R;  // Para acceder a tus colores
+import ar.edu.uade.api.R;
 import data.api.RetrofitClient;
 import data.dto.ReviewResponse;
 import data.session.SessionManager;
@@ -19,10 +19,10 @@ public class VoteManager {
     private final Context context;
     private final SessionManager sessionManager;
     private final Map<Long, Integer> voteStates = new HashMap<>();
-    private final Map<Long, Integer> voteCounts = new HashMap<>();  // NUEVO: Para persistir contadores localmente
+    private final Map<Long, Integer> voteCounts = new HashMap<>();
 
     private VoteManager(Context context) {
-        this.context = context.getApplicationContext();  // Usar application context para evitar leaks
+        this.context = context.getApplicationContext();
         this.sessionManager = SessionManager.getInstance(context);
     }
 
@@ -33,21 +33,19 @@ public class VoteManager {
         return instance;
     }
 
-    // Método para manejar votos (toggle o nuevo voto)
     public void handleVote(long reviewId, int type, VoteCallback callback) {
         int current = voteStates.getOrDefault(reviewId, 0);
         int newState;
 
         if (current == type) {
-            newState = 0;  // Eliminar voto
+            newState = 0;
         } else {
-            newState = type;  // Aplicar nuevo voto
+            newState = type;
         }
 
         sendVoteRequest(reviewId, newState, callback);
     }
 
-    // Método para enviar el request de voto
     private void sendVoteRequest(long reviewId, int newState, VoteCallback callback) {
         String token = sessionManager.getToken();
         Call<ReviewResponse> call;
@@ -57,7 +55,6 @@ public class VoteManager {
         } else if (newState == -1) {
             call = RetrofitClient.getReviewApi(token).downVoteReview(reviewId);
         } else {
-            // Eliminar voto: enviar el opuesto al estado anterior
             int previous = voteStates.getOrDefault(reviewId, 0);
             if (previous == 1) {
                 call = RetrofitClient.getReviewApi(token).downVoteReview(reviewId);
@@ -76,9 +73,8 @@ public class VoteManager {
 
                 ReviewResponse updated = response.body();
                 voteStates.put(reviewId, newState);
-                voteCounts.put(reviewId, updated.getReviewVotes());  // NUEVO: Guardar contador actualizado localmente
+                voteCounts.put(reviewId, updated.getReviewVotes());
 
-                // Notificar al callback para actualizar UI
                 callback.onVoteSuccess(updated, newState);
             }
 
@@ -93,23 +89,19 @@ public class VoteManager {
     public void resetStates(List<ReviewResponse> reviews) {
         voteStates.clear();
         for (ReviewResponse r : reviews) {
-            voteStates.put(r.getId(), 0); // estado neutral inicial
+            voteStates.put(r.getId(), 0);
         }
     }
 
-    // Método para actualizar la UI de botones de voto (usando colores de tu ReviewAdapter original)
     public void updateVoteButtonsUI(VoteUIHolder holder, long reviewId) {
         int state = voteStates.getOrDefault(reviewId, 0);
 
-        // Colores consistentes con tu ReviewAdapter (cambia si no existen en tu colors.xml)
-        int neutralColor = context.getColor(R.color.black);  // Gris neutro
-        int selectedColor = context.getColor(R.color.accent_blue);  // Azul para seleccionado
+        int neutralColor = context.getColor(R.color.black);
+        int selectedColor = context.getColor(R.color.accent_blue);
 
-        // Cambiar color de los iconos (TextViews con "▲" y "▼")
         holder.getTvUpvoteIcon().setTextColor(state == 1 ? selectedColor : neutralColor);
         holder.getTvDownvoteIcon().setTextColor(state == -1 ? selectedColor : neutralColor);
 
-        // NUEVO: Si hay contador guardado localmente, úsalo (sobrescribe el del servidor)
         if (voteCounts.containsKey(reviewId)) {
             holder.getTvVoteCount().setText(String.valueOf(voteCounts.get(reviewId)));
         }
@@ -127,7 +119,6 @@ public class VoteManager {
         void onVoteSuccess(ReviewResponse updatedReview, int newState);
     }
 
-    // Interfaz para holders de UI (para actualizar botones)
     public interface VoteUIHolder {
         android.widget.TextView getTvUpvoteIcon();
         android.widget.TextView getTvDownvoteIcon();

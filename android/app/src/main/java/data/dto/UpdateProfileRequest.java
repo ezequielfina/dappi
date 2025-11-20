@@ -10,7 +10,7 @@ public class UpdateProfileRequest {
     private String email;
 
     @SerializedName("password")
-    private String password; // Opcional, puede ser null si no se cambia
+    private String password;
 
     public UpdateProfileRequest(String userName, String email, String password) {
         this.userName = userName;

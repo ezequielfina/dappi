@@ -31,24 +31,20 @@ public class WelcomeActivity extends AppCompatActivity {
     }
 
     private void setupClickListeners() {
-        // Botón Registrarse - Navega a RegisterActivity
         btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(WelcomeActivity.this, RegisterActivity.class);
                 startActivity(intent);
-                // Animación de transición
                 overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
             }
         });
 
-        // Botón Iniciar Sesión - Navega a LoginActivity
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(WelcomeActivity.this, LoginActivity.class);
                 startActivity(intent);
-                // Animación de transición
                 overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
             }
         });
@@ -56,7 +52,6 @@ public class WelcomeActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        // Salir de la app desde la pantalla de bienvenida
         super.onBackPressed();
         finishAffinity();
     }

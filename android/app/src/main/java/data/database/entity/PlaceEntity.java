@@ -17,20 +17,17 @@ public class PlaceEntity {
     private String url;
     private String placeCategory;
 
-    // Campos adicionales
     private String entryTime;
     private String endTime;
     private String instagram;
     private String website;
     private String placeType;
 
-    // Metadata
     private long lastUpdated;
     private boolean isFavorite;
 
     public PlaceEntity() {}
 
-    // Getters y Setters
     public long getId() { return id; }
     public void setId(long id) { this.id = id; }
 

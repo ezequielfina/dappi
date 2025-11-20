@@ -29,7 +29,6 @@ public class PlaceResponse {
     @SerializedName("placeCategory")
     private String placeCategory;
 
-    // Campos adicionales del modelo de tu amigo
     @SerializedName("entryTime")
     private String entryTime;
 
@@ -48,7 +47,6 @@ public class PlaceResponse {
     @SerializedName("reviews")
     private List<ReviewResponse> reviews;
 
-    // Getters
     public Long getId() { return id; }
     public String getName() { return name; }
     public String getFullAddress() { return fullAddress; }

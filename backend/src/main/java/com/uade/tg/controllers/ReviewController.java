@@ -35,11 +35,9 @@ public class ReviewController {
             @RequestPart("review") String reviewJson,
             @RequestPart(value = "photos", required = false) List<MultipartFile> photos) {
         try {
-            // Parsear el JSON de la reseña
             ObjectMapper objectMapper = new ObjectMapper();
             CreateReviewRequestDTO req = objectMapper.readValue(reviewJson, CreateReviewRequestDTO.class);
             
-            // Crear la reseña con fotos
             ReviewResponseDTO response = reviewService.createReviewWithPhotos(req, photos);
             return ResponseEntity.ok(response);
         } catch (Exception e) {

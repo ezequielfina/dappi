@@ -8,16 +8,11 @@ import java.util.concurrent.TimeUnit;
 
 public class RetrofitClient {
 
-    // Configuración para emulador (10.0.2.2) o dispositivo físico (IP de tu PC)
     private static final String BASE_URL = "http://travel-guide.us-east-1.elasticbeanstalk.com/api/v1/";
-    // private static final String BASE_URL = "http://192.168.0.13:8080/api/v1/";
 
     private static Retrofit retrofit = null;
     private static Retrofit retrofitWithAuth = null;
 
-    /**
-     * Cliente básico sin autenticación
-     */
     public static Retrofit getClient() {
         if (retrofit == null) {
             OkHttpClient client = new OkHttpClient.Builder()
@@ -36,10 +31,6 @@ public class RetrofitClient {
         return retrofit;
     }
 
-    /**
-     * Cliente con autenticación (Bearer Token)
-     * IMPORTANTE: NO cachear - crear nuevo cliente cada vez con token actualizado
-     */
     public static Retrofit getClientWithAuth(String token) {
         OkHttpClient client = new OkHttpClient.Builder()
                 .connectTimeout(30, TimeUnit.SECONDS)
@@ -56,16 +47,11 @@ public class RetrofitClient {
                 .build();
     }
 
-    /**
-     * Logging interceptor para debug
-     */
     private static HttpLoggingInterceptor getLoggingInterceptor() {
         HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
         logging.setLevel(HttpLoggingInterceptor.Level.BODY);
         return logging;
     }
-
-    // ===== Factory Methods para APIs =====
 
     public static AuthApi getAuthApi() {
         return getClient().create(AuthApi.class);

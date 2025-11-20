@@ -17,14 +17,12 @@ public class ReviewEntity {
     private double userLongitude;
     private String photoPath;
 
-    // Sincronización
     private boolean synced;
     private long createdAt;
     private Long remoteId;
 
     public ReviewEntity() {}
 
-    // Getters y Setters
     public long getId() { return id; }
     public void setId(long id) { this.id = id; }
 

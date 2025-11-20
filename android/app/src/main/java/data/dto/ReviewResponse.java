@@ -35,7 +35,6 @@ public class ReviewResponse {
     @SerializedName("createdAt")
     private String createdAt;
 
-    // Getters
     public Long getId() { return id; }
     public Long getUserId() { return userId; }
     public Long getPlaceId() { return placeId; }

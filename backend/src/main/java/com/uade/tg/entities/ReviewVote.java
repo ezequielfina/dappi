@@ -24,11 +24,10 @@ public class ReviewVote {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    // qué review
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "review_id", nullable = false)
     private Review review;
 
     @Column(nullable = false)
-    private Integer value; // 1 = upvote, -1 = downvote
+    private Integer value;
 }

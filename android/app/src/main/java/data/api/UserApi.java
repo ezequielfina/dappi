@@ -23,6 +23,6 @@ public interface UserApi {
     Call<UserProfileResponse> getMyProfile();
 
     @Multipart
-    @POST("users/me/photo") // O la ruta de subida, ej: "users/upload-photo"
+    @POST("users/me/photo")
     Call<UserProfileResponse> uploadProfilePicture(@Part MultipartBody.Part photo);
 }

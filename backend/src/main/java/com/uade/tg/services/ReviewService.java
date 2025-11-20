@@ -34,9 +34,6 @@ public class ReviewService {
     private final ReviewPhotoRepository reviewPhotoRepository;
     private final FileStorageService fileStorageService;
 
-    // MODO DEMO: Validación de distancia deshabilitada
-    // private static final double MAX_DISTANCE_METERS = 500; // 500 metros
-
     public ReviewService(ReviewRepository reviewRepository, 
                         UserRepository userRepository, 
                         PlaceRepository placeRepository, 
@@ -58,8 +55,6 @@ public class ReviewService {
         Place place = placeRepository.findById(req.getPlaceId())
                 .orElseThrow(() -> new EntityNotFoundException("Lugar no encontrado"));
 
-        // VALIDACIÓN GPS DESHABILITADA PARA DEMO/PRESENTACIÓN
-        // La ubicación se guarda pero no se valida la distancia
         if (req.getUserLatitude() != null && req.getUserLongitude() != null) {
             double distance = calculateDistance(
                 req.getUserLatitude(), 
@@ -86,10 +81,8 @@ public class ReviewService {
     
     @Transactional
     public ReviewResponseDTO createReviewWithPhotos(CreateReviewRequestDTO req, List<MultipartFile> photos) {
-        // Crear la reseña
         Review review = createReview(req);
         
-        // Guardar las fotos si existen
         if (photos != null && !photos.isEmpty()) {
             for (MultipartFile photo : photos) {
                 if (!photo.isEmpty()) {
@@ -112,11 +105,8 @@ public class ReviewService {
         return convertToDTO(review);
     }
     
-    /**
-     * Calcula la distancia en metros entre dos coordenadas GPS usando la fórmula de Haversine
-     */
     private double calculateDistance(double lat1, double lon1, double lat2, double lon2) {
-        final int EARTH_RADIUS = 6371000; // Radio de la Tierra en metros
+        final int EARTH_RADIUS = 6371000;
         
         double dLat = Math.toRadians(lat2 - lat1);
         double dLon = Math.toRadians(lon2 - lon1);
@@ -150,7 +140,7 @@ public class ReviewService {
                 .rateToPlace(review.getRateToPlace())
                 .reviewVotes(review.getReviewVotes())
                 .userId(user != null ? user.getId() : null)
-                .userName(user != null ? user.getUsername() : "") // UserDetails interface method
+                .userName(user != null ? user.getUsername() : "")
                 .placeId(place != null ? place.getId() : null)
                 .placeName(place != null ? place.getName() : "")
                 .photos(photoDTOs)
@@ -191,7 +181,6 @@ public class ReviewService {
         vote.setValue(1);
         reviewVoteRepository.save(vote);
 
-        // actualizar contador en la review
         review.setReviewVotes(review.getReviewVotes() + 1);
         return reviewRepository.save(review);
     }

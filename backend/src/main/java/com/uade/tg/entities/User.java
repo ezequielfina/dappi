@@ -54,7 +54,6 @@ public class User implements UserDetails {
         return List.of();
     }
 
-    // Esto es para el AUTHENTICATE request, devuelve el mail con el que se registro.
     @Override
     public String getUsername() {
         return email;

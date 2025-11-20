@@ -44,7 +44,6 @@ public class SessionManager {
         Log.d(TAG, "Sesión guardada - User: " + username);
     }
 
-    // Nuevo método para guardar perfil completo
     public void saveUserProfile(String username, String email, String profilePictureUrl,
                                 int reviewsCount, int upvotes) {
         SharedPreferences.Editor editor = prefs.edit();
@@ -58,7 +57,6 @@ public class SessionManager {
         Log.d(TAG, "Perfil actualizado - User: " + username);
     }
 
-    // Método para actualizar solo la foto de perfil
     public void updateProfilePicture(String profilePictureUrl) {
         prefs.edit()
                 .putString(KEY_PROFILE_PICTURE_URL, profilePictureUrl)

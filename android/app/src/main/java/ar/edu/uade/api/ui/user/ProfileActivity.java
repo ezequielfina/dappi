@@ -25,7 +25,7 @@ import ar.edu.uade.api.ui.home.Home;
 import ar.edu.uade.api.ui.map.MapActivity;
 import data.dto.UserProfileResponse;
 import data.repository.UserRepository;
-import data.repository.callback.UserCallback; // Necesitamos el callback del repositorio
+import data.repository.callback.UserCallback;
 import data.session.SessionManager;
 
 import java.util.ArrayList;
@@ -44,33 +44,25 @@ public class ProfileActivity extends AppCompatActivity {
         binding = ActivityProfileBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        // Inicializar dependencias
         sessionManager = SessionManager.getInstance(this);
-        // Inicializar Repositorio
         userRepository = UserRepository.getInstance(getApplicationContext());
 
-        // Iniciar la carga de datos del usuario
         loadUserProfile();
 
-        // ---------- CONFIGURACIÓN DE TOOLBAR Y OTROS ELEMENTOS (sin cambios) ----------
         setSupportActionBar(binding.topAppBar);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(false);
             getSupportActionBar().setDisplayShowTitleEnabled(false);
         }
 
-        // ... (Tu lógica existente para Favoritos, Banderas, y Bottom Nav) ...
-        setupRecyclerViews(); // Se puede mover la configuración de RV a un método
+        setupRecyclerViews();
         setupNavigation();
     }
 
-    // Método separado para la configuración de RecyclerViews
     private void setupRecyclerViews() {
 
-        // ---------- SECCIÓN BANDERAS ----------
         List<Integer> flagImages = new ArrayList<>();
         flagImages.add(R.drawable.ic_flag_arg);
-        // ... (resto de imágenes) ...
 
         FlagsFavoritesAdapter flagsAdapter = new FlagsFavoritesAdapter(this, flagImages);
         LinearLayoutManager flagsLM =
@@ -78,7 +70,6 @@ public class ProfileActivity extends AppCompatActivity {
         binding.rvFlags.setLayoutManager(flagsLM);
         binding.rvFlags.setAdapter(flagsAdapter);
 
-        // ... (Tu lógica para scroll y botones) ...
         binding.rvFlags.addOnItemTouchListener(new RecyclerView.SimpleOnItemTouchListener() {
             @Override
             public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
@@ -94,7 +85,6 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void setupNavigation() {
-        // ---------- BOTTOM NAV (Tu lógica existente) ----------
         BottomNavigationView bottom = findViewById(R.id.bottomNav);
         bottom.setSelectedItemId(R.id.navigation_profile);
         bottom.setOnItemReselectedListener(item -> {});
@@ -114,10 +104,8 @@ public class ProfileActivity extends AppCompatActivity {
         });
     }
 
-    // --- NUEVO MÉTODO DE CARGA DIRECTA ---
     private void loadUserProfile() {
         binding.profileProgress.setVisibility(View.VISIBLE);
-        // Ocultar contenido mientras carga
         binding.profileContentLayout.setVisibility(View.GONE);
 
         String token = sessionManager.getToken();
@@ -127,23 +115,18 @@ public class ProfileActivity extends AppCompatActivity {
             return;
         }
 
-        // 1. Establecer el token en el Repositorio (si aún no está configurado)
         userRepository.setAuthToken(token);
 
-        // 2. Llamar al Repositorio y manejar la respuesta con el UserCallback
         userRepository.fetchUserProfile(new UserCallback() {
             @Override
             public void onSuccess(UserProfileResponse user) {
-                // Ejecutado en el hilo principal
                 binding.profileProgress.setVisibility(View.GONE);
                 binding.profileContentLayout.setVisibility(View.VISIBLE);
                 updateUIWithUserData(user);
-                // Opcional: Guardar los datos del perfil en el SessionManager (similar a Home.java)
             }
 
             @Override
             public void onError(String error) {
-                // Ejecutado en el hilo principal
                 binding.profileProgress.setVisibility(View.GONE);
                 binding.profileContentLayout.setVisibility(View.VISIBLE);
                 Log.e(TAG, "Error cargando perfil: " + error);
@@ -155,34 +138,26 @@ public class ProfileActivity extends AppCompatActivity {
     @SuppressLint("SetTextI18n")
     private void updateUIWithUserData(UserProfileResponse profile) {
         if (profile != null) {
-            // 1. Actualizar datos básicos del perfil
             binding.tvProfileUsername.setText(profile.getUserName());
             binding.tvProfileEmail.setText(profile.getEmail());
             binding.tvReviewCount.setText(String.valueOf(profile.getResenasRealizadas()));
             binding.tvUpvoteCount.setText(profile.getUpvotes().toString());
 
-            // 2. Cargar imagen de perfil
             loadProfileImage(profile.getProfilePictureUrl());
 
-            // 3. Actualizar la sección "Reseña más popular" DINÁMICAMENTE
             if (profile.getReviewMasVotada() != null) {
-                // Si hay reseña, mostramos el layout y cargamos los datos
                 binding.layoutPopularReview.setVisibility(View.VISIBLE);
 
-                // Descripción
                 String desc = profile.getReviewMasVotada().getDescription();
                 binding.tvPopularReviewDesc.setText(desc != null ? desc : "Sin descripción");
 
-                // Votos (Manejo seguro de Integer null)
                 Integer votes = profile.getReviewMasVotada().getReviewVotes();
                 binding.tvPopularReviewVotes.setText(" " + (votes != null ? votes : 0) + " ");
 
-                // Rate (Manejo seguro de Integer null)
                 Integer rate = profile.getReviewMasVotada().getRateToPlace();
                 binding.tvRateToPlace.setText(" " + (rate != null ? rate : null) + " ");
 
             } else {
-                // Si NO hay reseña más votada (es null), ocultamos toda la sección
                 binding.layoutPopularReview.setVisibility(View.GONE);
             }
         }
@@ -205,8 +180,6 @@ public class ProfileActivity extends AppCompatActivity {
         }
     }
 
-
-    // --- Métodos de Menú (sin cambios) ---
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_profile_top, menu);
