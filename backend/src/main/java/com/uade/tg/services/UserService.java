@@ -92,7 +92,7 @@ public class UserService {
             user.setPassword(request.getPassword());
         }
         if (request.getProfilePicture() != null && !request.getProfilePicture().isEmpty()) {
-            user.setProfilePictureUrl(request.getProfilePicture());
+            user.setProfilePictureUrl( request.getProfilePicture());
         }
         return Optional.of(userRepository.save(user));
     }

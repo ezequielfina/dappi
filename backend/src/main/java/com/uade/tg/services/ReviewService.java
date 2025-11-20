@@ -15,8 +15,10 @@ import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class ReviewService {
@@ -62,26 +64,43 @@ public class ReviewService {
         review.setDescription(req.getDescription());
         review.setRateToPlace(req.getRateToPlace());
         review.setPhotoUrl(req.getPhotoUrl());
+        review.setCreatedAt(req.getCreatedAt());
 
         return reviewRepository.save(review);
     }
 
-    public List<ReviewResponseDTO> getReviewsByPlace(Long placeId) {
-        Place place = placeRepository.findById(placeId)
-                .orElseThrow(() -> new EntityNotFoundException("Lugar no encontrado"));
-        List<Review> reviews = reviewRepository.findByPlaceOrdered(placeId);
+    public List<ReviewResponseDTO> getReviewsByPlace(Long placeId, String sortBy) {
+        List<Review> reviews;
+
+        switch (sortBy.toLowerCase()) {
+            case "worst":
+
+                reviews = reviewRepository.findByPlaceIdOrderByRateToPlaceAsc(placeId);
+                break;
+            case "latest":
+
+                reviews = reviewRepository.findByPlaceIdOrderByCreatedAtDesc(placeId);
+                break;
+            case "best":
+            default:
+
+                reviews = reviewRepository.findByPlaceIdOrderByRateToPlaceDesc(placeId);
+                break;
+        }
 
         return reviews.stream()
-                .map(r -> new ReviewResponseDTO(
-                        r.getId(),
-                        r.getDescription(),
-                        r.getRateToPlace(),
-                        r.getReviewVotes(),
-                        r.getUser().getId(),
-                        r.getPlace().getId(),
-                        r.getPhotoUrl()
+                .map(review -> new ReviewResponseDTO(
+                        review.getId(),
+                        review.getDescription(),
+                        review.getRateToPlace(),
+                        review.getReviewVotes(),
+                        review.getUser().getId(),
+                        review.getPlace().getId(),
+                        review.getCreatedAt(),
+                        review.getPhotoUrl()
+
                 ))
-                .toList();
+                .collect(Collectors.toList());
     }
 
 
@@ -95,6 +114,7 @@ public class ReviewService {
                         r.getReviewVotes(),
                         r.getUser().getId(),
                         r.getPlace().getId(),
+                        r.getCreatedAt(),
                         r.getPhotoUrl()
                 ))
                 .toList();
@@ -153,6 +173,7 @@ public class ReviewService {
                 review.getReviewVotes(),
                 review.getUser().getId(),
                 review.getPlace().getId(),
+                review.getCreatedAt(),
                 review.getPhotoUrl()
         );
     }
@@ -190,6 +211,7 @@ public class ReviewService {
                 review.getReviewVotes(),
                 review.getUser().getId(),
                 review.getPlace().getId(),
+                review.getCreatedAt(),
                 review.getPhotoUrl()
         );
     }

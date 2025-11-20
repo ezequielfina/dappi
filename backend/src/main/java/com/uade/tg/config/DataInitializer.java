@@ -103,7 +103,23 @@ public class DataInitializer {
                     .place(place3)
                     .build();
 
-            reviewRepository.saveAll(Arrays.asList(r1, r2, r3));
+            Review r4 = Review.builder()
+                    .description("Hermoso lugar para caminar, muy tranquilo y bien mantenido.")
+                    .rateToPlace(5)
+                    .photoUrl(null)
+                    .user(demoUser)
+                    .place(place2)
+                    .build();
+
+            Review r5 = Review.builder()
+                    .description("Lindo parque pero a veces hay demasiada gente los fines de semana.")
+                    .rateToPlace(3)
+                    .photoUrl(null)
+                    .user(demoUser)
+                    .place(place2)
+                    .build();
+
+            reviewRepository.saveAll(Arrays.asList(r1, r2, r3, r4, r5));
 
             System.out.println("=== DATABASE INITIALIZED WITH PLACES + REVIEWS ===");
         };

@@ -31,14 +31,18 @@ public class ReviewController {
                 review.getReviewVotes(),
                 review.getUser().getId(),
                 review.getPlace().getId(),
+                review.getCreatedAt(),
                 review.getPhotoUrl()
         );
         return ResponseEntity.status(201).body(response);
     }
 
     @GetMapping("/places/{placeId}")
-    public ResponseEntity<List<ReviewResponseDTO>> getReviewsByPlace(@PathVariable Long placeId) {
-        List<ReviewResponseDTO> reviews = reviewService.getReviewsByPlace(placeId);
+    public ResponseEntity<List<ReviewResponseDTO>> getReviewsByPlace(
+            @PathVariable Long placeId,
+            @RequestParam(required = false, defaultValue = "best") String sortBy) {
+
+        List<ReviewResponseDTO> reviews = reviewService.getReviewsByPlace(placeId, sortBy);
         return ResponseEntity.ok(reviews);
     }
 
