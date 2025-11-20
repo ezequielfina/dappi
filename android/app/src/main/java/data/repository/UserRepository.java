@@ -3,12 +3,18 @@ package data.repository;
 import android.content.Context;
 import android.util.Log;
 
+import java.io.File;
+
 import data.api.RetrofitClient;
 import data.api.UserApi;
 import data.database.AppDatabase;
+import data.dto.UpdateProfileRequest;
 import data.dto.UserProfileResponse;
 import data.network.NetworkManager;
 import data.repository.callback.UserCallback;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -96,5 +102,94 @@ public class UserRepository {
                 callback.onError("Error de conexión: " + t.getMessage());
             }
         });
+    }
+
+    public void updateUserProfile(String newName, String newEmail, String newPassword, UserCallback callback) {
+        if (authToken == null || !networkManager.isConnected()) {
+            callback.onError("Sin conexión o sesión inválida");
+            return;
+        }
+
+        UserApi api = RetrofitClient.getUserApi(authToken);
+
+        // Preparamos el request
+        String passwordToSend = (newPassword != null && !newPassword.isEmpty()) ? newPassword : null;
+        UpdateProfileRequest request = new UpdateProfileRequest(newName, newEmail, passwordToSend);
+
+        // LLAMADA CORREGIDA: Usamos Call<Void>
+        api.updateProfile(request).enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if (response.isSuccessful()) {
+                    // ✅ ÉXITO: El backend dijo "OK" (200), pero no mandó cuerpo (Void).
+
+                    // Truco: Como el backend no nos devuelve el usuario actualizado,
+                    // creamos uno "manual" con los datos nuevos para actualizar la UI inmediatamente.
+                    UserProfileResponse localUpdate = new UserProfileResponse();
+                    localUpdate.setUserName(newName);
+                    localUpdate.setEmail(newEmail);
+                    // Mantenemos los datos viejos que no cambiaron (opcional, o pedimos fetch de nuevo)
+                    // Nota: La foto y stats no cambian en este endpoint.
+
+                    callback.onSuccess(localUpdate);
+
+                } else {
+                    callback.onError("Error al actualizar: " + response.code());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                callback.onError("Error de conexión: " + t.getMessage());
+            }
+        });
+    }
+
+    /**
+     * Sube una nueva foto de perfil.
+     * @param photoFile El archivo de imagen obtenido de la galería/cámara.
+     */
+    public void uploadProfilePicture(File photoFile, UserCallback callback) {
+        if (!isValidSession(callback)) return;
+        if (photoFile == null || !photoFile.exists()) {
+            callback.onError("El archivo de imagen no existe");
+            return;
+        }
+
+        UserApi api = RetrofitClient.getUserApi(authToken);
+
+        // 1. Crear el RequestBody para el archivo
+        // Usamos "image/*" para aceptar jpg, png, etc.
+        RequestBody requestFile = RequestBody.create(MediaType.parse("image/*"), photoFile);
+
+        // 2. Crear el MultipartBody.Part
+        // "file" es el nombre del parámetro que espera el Backend (@RequestParam("file") MultipartFile file)
+        MultipartBody.Part body = MultipartBody.Part.createFormData("file", photoFile.getName(), requestFile);
+
+        // 3. Ejecutar llamada
+        api.uploadProfilePicture(body).enqueue(new Callback<UserProfileResponse>() {
+            @Override
+            public void onResponse(Call<UserProfileResponse> call, Response<UserProfileResponse> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    callback.onSuccess(response.body());
+                } else {
+                    callback.onError("Error al subir imagen: " + response.code());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<UserProfileResponse> call, Throwable t) {
+                callback.onError("Fallo al subir imagen: " + t.getMessage());
+            }
+        });
+    }
+
+    // Método auxiliar para validar sesión
+    private boolean isValidSession(UserCallback callback) {
+        if (authToken == null || !networkManager.isConnected()) {
+            callback.onError("Sin conexión o sesión inválida");
+            return false;
+        }
+        return true;
     }
 }

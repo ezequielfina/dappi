@@ -1,16 +1,20 @@
 package data.dto;
 
+import com.google.gson.annotations.SerializedName;
+
 public class UpdateProfileRequest {
-    private String country;
-    private String favoritePlace;
-    private String profileImageUrl;
+    @SerializedName("userName")
+    private String userName;
 
-    public UpdateProfileRequest() {
-    }
+    @SerializedName("email")
+    private String email;
 
-    public UpdateProfileRequest(String country, String favoritePlace, String profileImageUrl) {
-        this.country = country;
-        this.favoritePlace = favoritePlace;
-        this.profileImageUrl = profileImageUrl;
+    @SerializedName("password")
+    private String password; // Opcional, puede ser null si no se cambia
+
+    public UpdateProfileRequest(String userName, String email, String password) {
+        this.userName = userName;
+        this.email = email;
+        this.password = password;
     }
 }

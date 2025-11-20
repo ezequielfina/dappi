@@ -2,10 +2,14 @@ package data.api;
 
 import data.dto.UpdateProfileRequest;
 import data.dto.UserProfileResponse;
+import okhttp3.MultipartBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.Multipart;
+import retrofit2.http.POST;
 import retrofit2.http.PUT;
+import retrofit2.http.Part;
 
 public interface UserApi {
 
@@ -17,4 +21,8 @@ public interface UserApi {
 
     @GET("users/me")
     Call<UserProfileResponse> getMyProfile();
+
+    @Multipart
+    @POST("users/me/photo") // O la ruta de subida, ej: "users/upload-photo"
+    Call<UserProfileResponse> uploadProfilePicture(@Part MultipartBody.Part photo);
 }

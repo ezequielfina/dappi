@@ -2,12 +2,12 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background_dark"
     android:fitsSystemWindows="true">
 
-    <!-- ===== APP BAR ===== -->
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbar"
         android:layout_width="0dp"
@@ -21,13 +21,13 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="@color/background_dark"
-            app:title=""
             app:navigationIcon="@drawable/arrow_back"
             app:navigationIconTint="@color/text_primary"
+            app:title="Editar Perfil"
+            app:titleTextColor="@color/text_primary"
             app:theme="@style/ToolbarOverlay.Dark" />
     </com.google.android.material.appbar.AppBarLayout>
 
-    <!-- ===== CONTENIDO ===== -->
     <ScrollView
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -43,7 +43,6 @@
             android:orientation="vertical"
             android:padding="24dp">
 
-            <!-- FOTO DE PERFIL -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -56,21 +55,22 @@
                     android:id="@+id/imgProfile"
                     android:layout_width="100dp"
                     android:layout_height="100dp"
-                    android:src="@mipmap/avatar_foreground"
+                    tools:src="@mipmap/avatar_foreground"
                     android:scaleType="centerCrop"
-                    app:shapeAppearanceOverlay="@style/CircleImage" />
+                    app:shapeAppearanceOverlay="@style/CircleImage"
+                    app:strokeWidth="2dp"
+                    app:strokeColor="@color/button_primary"/>
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnChangePhoto"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginTop="12dp"
                     android:text="Cambiar foto"
                     style="@style/Widget.Material3.Button.TextButton"
                     android:textColor="@color/button_primary" />
             </LinearLayout>
 
-            <!-- NOMBRE DE USUARIO -->
             <com.google.android.material.textfield.TextInputLayout
                 style="@style/Widget.Material3.TextInputLayout.FilledBox"
                 android:layout_width="match_parent"
@@ -78,17 +78,19 @@
                 android:hint="Nombre de usuario"
                 app:boxBackgroundColor="@color/background_dark"
                 app:hintTextColor="@color/muted"
-                app:boxStrokeColor="@color/button_primary">
-
+                app:boxStrokeColor="@color/button_primary"
+                app:startIconTint="@color/muted">
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etUsername"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textColor="@color/text_primary"
-                    android:inputType="textPersonName"/>
+                    android:inputType="textPersonName"
+                    android:imeOptions="actionNext"
+                    android:maxLines="1"
+                    tools:text="Ezequiel"/>
             </com.google.android.material.textfield.TextInputLayout>
 
-            <!-- EMAIL -->
             <com.google.android.material.textfield.TextInputLayout
                 style="@style/Widget.Material3.TextInputLayout.FilledBox"
                 android:layout_width="match_parent"
@@ -97,37 +99,43 @@
                 android:layout_marginTop="16dp"
                 app:boxBackgroundColor="@color/background_dark"
                 app:hintTextColor="@color/muted"
-                app:boxStrokeColor="@color/button_primary">
+                app:boxStrokeColor="@color/button_primary"
+                app:startIconTint="@color/muted">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etEmail"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textColor="@color/text_primary"
-                    android:inputType="textEmailAddress"/>
+                    android:inputType="textEmailAddress"
+                    android:imeOptions="actionNext"
+                    android:maxLines="1"
+                    tools:text="ezequiel@uade.edu.ar"/>
             </com.google.android.material.textfield.TextInputLayout>
 
-            <!-- CONTRASEÑA -->
             <com.google.android.material.textfield.TextInputLayout
                 style="@style/Widget.Material3.TextInputLayout.FilledBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Nueva contraseña"
+                android:hint="Nueva contraseña (Opcional)"
                 android:layout_marginTop="16dp"
                 app:passwordToggleEnabled="true"
+                app:passwordToggleTint="@color/muted"
                 app:boxBackgroundColor="@color/background_dark"
                 app:hintTextColor="@color/muted"
-                app:boxStrokeColor="@color/button_primary">
+                app:boxStrokeColor="@color/button_primary"
+                app:startIconTint="@color/muted">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etPassword"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textColor="@color/text_primary"
-                    android:inputType="textPassword"/>
+                    android:inputType="textPassword"
+                    android:imeOptions="actionNext"
+                    android:maxLines="1"/>
             </com.google.android.material.textfield.TextInputLayout>
 
-            <!-- CONFIRMAR CONTRASEÑA -->
             <com.google.android.material.textfield.TextInputLayout
                 style="@style/Widget.Material3.TextInputLayout.FilledBox"
                 android:layout_width="match_parent"
@@ -135,30 +143,33 @@
                 android:hint="Confirmar contraseña"
                 android:layout_marginTop="16dp"
                 app:passwordToggleEnabled="true"
+                app:passwordToggleTint="@color/muted"
                 app:boxBackgroundColor="@color/background_dark"
                 app:hintTextColor="@color/muted"
-                app:boxStrokeColor="@color/button_primary">
+                app:boxStrokeColor="@color/button_primary"
+                app:startIconTint="@color/muted">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etConfirmPassword"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textColor="@color/text_primary"
-                    android:inputType="textPassword"/>
+                    android:inputType="textPassword"
+                    android:imeOptions="actionDone"
+                    android:maxLines="1"/>
             </com.google.android.material.textfield.TextInputLayout>
 
-            <!-- BOTÓN GUARDAR CAMBIOS -->
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnSaveChanges"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="28dp"
+                android:layout_height="56dp"
+                android:layout_marginTop="32dp"
                 android:text="Guardar cambios"
                 android:textAllCaps="false"
                 android:textSize="16sp"
+                android:textStyle="bold"
                 android:textColor="@color/text_primary"
-                app:cornerRadius="16dp"
-                app:iconGravity="textStart"
+                app:cornerRadius="12dp"
                 android:backgroundTint="@color/button_primary"/>
 
         </LinearLayout>
