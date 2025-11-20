@@ -9,7 +9,7 @@ public class UserProfileResponse {
     @SerializedName("email")
     private String email;
 
-    @SerializedName("profilePictureUrl")
+    @SerializedName("profilePicture")
     private String profilePictureUrl;
 
     @SerializedName("resenasRealizadas")

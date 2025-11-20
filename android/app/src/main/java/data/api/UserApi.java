@@ -1,5 +1,6 @@
 package data.api;
 
+import data.dto.OnboardingRequest;
 import data.dto.UpdateProfileRequest;
 import data.dto.UserProfileResponse;
 import okhttp3.MultipartBody;
@@ -14,7 +15,7 @@ import retrofit2.http.Part;
 public interface UserApi {
 
     @PUT("users/onboarding")
-    Call<Void> completeOnboarding(@Body UpdateProfileRequest request);
+    Call<Void> completeOnboarding(@Body OnboardingRequest request);
 
     @PUT("users/me/update")
     Call<Void> updateProfile(@Body UpdateProfileRequest request);

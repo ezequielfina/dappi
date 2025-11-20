@@ -35,7 +35,7 @@ import retrofit2.Response;
 
 import data.api.RetrofitClient;
 import data.api.UserApi;
-import data.dto.UpdateProfileRequest;
+import data.dto.OnboardingRequest;
 
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
@@ -301,7 +301,7 @@ public class OnboardingActivity extends AppCompatActivity {
         Log.d("OnboardingActivity", "Lugar favorito: " + selectedFavoritePlace);
 
 
-        UpdateProfileRequest request = new UpdateProfileRequest(
+        OnboardingRequest request = new OnboardingRequest(
                 selectedCountry,
                 selectedFavoritePlace,
                 "data:image/jpeg;base64," + profilePictureBase64
