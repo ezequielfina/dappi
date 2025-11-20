@@ -27,39 +27,39 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class ReviewRepository {
-    
+
     private static final String TAG = "ReviewRepository";
     private static ReviewRepository instance;
-    
+
     private final AppDatabase database;
     private final NetworkManager networkManager;
     private final Context context;
     private String authToken;
-    
+
     private ReviewRepository(Context context) {
         this.context = context.getApplicationContext();
         this.database = AppDatabase.getInstance(this.context);
         this.networkManager = NetworkManager.getInstance(this.context);
     }
-    
+
     public static synchronized ReviewRepository getInstance(Context context) {
         if (instance == null) {
             instance = new ReviewRepository(context);
         }
         return instance;
     }
-    
+
     public void setAuthToken(String token) {
         this.authToken = token;
     }
-    
+
     /**
      * Crear reseña con soporte offline
      * Si hay conexión → envía al backend
      * Si no hay conexión → guarda localmente para sincronizar después
      */
     public void createReview(
-            Long userId, 
+            Long userId,
             Long placeId,
             String description,
             int rating,
@@ -77,16 +77,16 @@ public class ReviewRepository {
         review.setUserLatitude(latitude);
         review.setUserLongitude(longitude);
         review.setCreatedAt(System.currentTimeMillis());
-        
+
         if (photoFile != null && photoFile.exists()) {
             review.setPhotoPath(photoFile.getAbsolutePath());
         }
-        
+
         if (networkManager.isConnected() && authToken != null) {
             // CON CONEXIÓN: Enviar al backend usando Retrofit
             Log.d(TAG, "🟢 Online: Enviando reseña al backend");
-            sendReviewToBackend(userId, placeId, description, rating, 
-                              latitude, longitude, photoFile, review, callback);
+            sendReviewToBackend(userId, placeId, description, rating,
+                    latitude, longitude, photoFile, review, callback);
         } else {
             // SIN CONEXIÓN: Guardar localmente
             Log.d(TAG, "🔴 Offline: Guardando reseña localmente");
@@ -94,10 +94,10 @@ public class ReviewRepository {
             long localId = database.reviewDao().insert(review);
             Log.d(TAG, "💾 Reseña guardada localmente con ID: " + localId);
             callback.onSavedOffline(
-                "Sin conexión. Reseña guardada y se sincronizará automáticamente.");
+                    "Sin conexión. Reseña guardada y se sincronizará automáticamente.");
         }
     }
-    
+
     /**
      * Enviar reseña al backend usando Retrofit
      */
@@ -107,17 +107,17 @@ public class ReviewRepository {
             ReviewEntity localReview, ReviewCallback callback
     ) {
         ReviewApi api = RetrofitClient.getReviewApi(authToken);
-        
+
         if (photoFile != null && photoFile.exists()) {
             // CON FOTO: Usar multipart
             sendReviewWithPhoto(api, userId, placeId, description, rating,
-                              latitude, longitude, photoFile, localReview, callback);
+                    latitude, longitude, photoFile, localReview, callback);
         } else {
             // SIN FOTO: JSON simple
             ReviewRequest request = new ReviewRequest(
-                userId, placeId, description, rating, latitude, longitude
+                    userId, placeId, description, rating, latitude, longitude
             );
-            
+
             api.createReview(request).enqueue(new Callback<ReviewResponse>() {
                 @Override
                 public void onResponse(Call<ReviewResponse> call, Response<ReviewResponse> response) {
@@ -132,7 +132,7 @@ public class ReviewRepository {
                         handleBackendError(localReview, callback);
                     }
                 }
-                
+
                 @Override
                 public void onFailure(Call<ReviewResponse> call, Throwable t) {
                     Log.e(TAG, "❌ Error de red: " + t.getMessage());
@@ -141,7 +141,7 @@ public class ReviewRepository {
             });
         }
     }
-    
+
     /**
      * Enviar reseña con foto usando multipart
      */
@@ -152,47 +152,47 @@ public class ReviewRepository {
     ) {
         // Crear JSON de la reseña
         ReviewRequest reviewRequest = new ReviewRequest(
-            userId, placeId, description, rating, latitude, longitude
+                userId, placeId, description, rating, latitude, longitude
         );
         String reviewJson = new Gson().toJson(reviewRequest);
         RequestBody reviewBody = RequestBody.create(
-            MediaType.parse("application/json"), reviewJson
+                MediaType.parse("application/json"), reviewJson
         );
-        
+
         // Crear parte de la foto
         List<MultipartBody.Part> photoParts = new ArrayList<>();
         RequestBody photoBody = RequestBody.create(
-            MediaType.parse("image/jpeg"), photoFile
+                MediaType.parse("image/jpeg"), photoFile
         );
         MultipartBody.Part photoPart = MultipartBody.Part.createFormData(
-            "photos", photoFile.getName(), photoBody
+                "photos", photoFile.getName(), photoBody
         );
         photoParts.add(photoPart);
-        
+
         // Enviar
         api.createReviewWithPhotos(reviewBody, photoParts)
-           .enqueue(new Callback<ReviewResponse>() {
-               @Override
-               public void onResponse(Call<ReviewResponse> call, Response<ReviewResponse> response) {
-                   if (response.isSuccessful() && response.body() != null) {
-                       localReview.setSynced(true);
-                       localReview.setRemoteId(response.body().getId());
-                       database.reviewDao().insert(localReview);
-                       Log.d(TAG, "✅ Reseña con foto sincronizada");
-                       callback.onSuccess("Reseña publicada exitosamente");
-                   } else {
-                       handleBackendError(localReview, callback);
-                   }
-               }
-               
-               @Override
-               public void onFailure(Call<ReviewResponse> call, Throwable t) {
-                   Log.e(TAG, "❌ Error enviando foto: " + t.getMessage());
-                   handleBackendError(localReview, callback);
-               }
-           });
+                .enqueue(new Callback<ReviewResponse>() {
+                    @Override
+                    public void onResponse(Call<ReviewResponse> call, Response<ReviewResponse> response) {
+                        if (response.isSuccessful() && response.body() != null) {
+                            localReview.setSynced(true);
+                            localReview.setRemoteId(response.body().getId());
+                            database.reviewDao().insert(localReview);
+                            Log.d(TAG, "✅ Reseña con foto sincronizada");
+                            callback.onSuccess("Reseña publicada exitosamente");
+                        } else {
+                            handleBackendError(localReview, callback);
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ReviewResponse> call, Throwable t) {
+                        Log.e(TAG, "❌ Error enviando foto: " + t.getMessage());
+                        handleBackendError(localReview, callback);
+                    }
+                });
     }
-    
+
     /**
      * Manejar error del backend: guardar localmente para sincronizar después
      */
@@ -201,43 +201,78 @@ public class ReviewRepository {
         database.reviewDao().insert(localReview);
         Log.w(TAG, "⚠️ Error al enviar, guardada localmente para sincronizar");
         callback.onSavedOffline(
-            "Reseña guardada. Se sincronizará cuando haya conexión.");
+                "Reseña guardada. Se sincronizará cuando haya conexión.");
     }
-    
+
     /**
-     * Obtener reseñas de un lugar
-     * Intenta del backend, si falla usa caché local
+     * 👇 MÉTODO ACTUALIZADO: Obtener reseñas de un lugar CON ORDENAMIENTO
+     * @param placeId ID del lugar
+     * @param sortBy "best", "worst", o "latest"
+     * @param callback Callback con la lista de reseñas
      */
-    public void getReviewsByPlace(Long placeId, ReviewListCallback callback) {
+    public void getReviewsByPlace(Long placeId, String sortBy, ReviewListCallback callback) {
         if (networkManager.isConnected() && authToken != null) {
             ReviewApi api = RetrofitClient.getReviewApi(authToken);
-            api.getReviewsByPlace(placeId).enqueue(new Callback<List<ReviewResponse>>() {
+
+            // 👇 USAR EL MÉTODO CON PARÁMETRO sortBy
+            api.getReviewsByPlace(placeId, sortBy).enqueue(new Callback<List<ReviewResponse>>() {
                 @Override
                 public void onResponse(Call<List<ReviewResponse>> call, Response<List<ReviewResponse>> response) {
                     if (response.isSuccessful() && response.body() != null) {
+                        Log.d(TAG, "✅ Reseñas cargadas con ordenamiento: " + sortBy);
                         callback.onSuccess(response.body());
                     } else {
-                        // Si falla, usar caché local
-                        useLocalCache(placeId, callback);
+                        Log.w(TAG, "⚠️ Error del servidor, usando caché local");
+                        useLocalCache(placeId, sortBy, callback);
                     }
                 }
-                
+
                 @Override
                 public void onFailure(Call<List<ReviewResponse>> call, Throwable t) {
-                    useLocalCache(placeId, callback);
+                    Log.e(TAG, "❌ Error de red, usando caché local: " + t.getMessage());
+                    useLocalCache(placeId, sortBy, callback);
                 }
             });
         } else {
-            useLocalCache(placeId, callback);
+            Log.d(TAG, "🔴 Sin conexión, usando caché local");
+            useLocalCache(placeId, sortBy, callback);
         }
     }
-    
-    private void useLocalCache(Long placeId, ReviewListCallback callback) {
-        List<ReviewEntity> localReviews = database.reviewDao().getReviewsByPlace(placeId);
-        Log.d(TAG, "📦 Usando caché local: " + localReviews.size() + " reseñas");
+
+    /**
+     * 👇 NUEVO SOBRECARGA: Método sin sortBy para compatibilidad (default "best")
+     */
+    public void getReviewsByPlace(Long placeId, ReviewListCallback callback) {
+        getReviewsByPlace(placeId, "best", callback);
+    }
+
+    /**
+     * 👇 MÉTODO ACTUALIZADO: Usar caché local con ordenamiento
+     */
+    private void useLocalCache(Long placeId, String sortBy, ReviewListCallback callback) {
+        List<ReviewEntity> localReviews;
+
+        switch (sortBy.toLowerCase()) {
+            case "worst":
+                // Peor reseña: menor rating primero
+                localReviews = database.reviewDao().getReviewsByPlaceOrderByRatingAsc(placeId);
+                break;
+            case "latest":
+                // Última reseña: más reciente primero
+                localReviews = database.reviewDao().getReviewsByPlaceOrderByDateDesc(placeId);
+                break;
+            case "best":
+            default:
+                // Mejor reseña: mayor rating primero
+                localReviews = database.reviewDao().getReviewsByPlaceOrderByRatingDesc(placeId);
+                break;
+        }
+
+        Log.d(TAG, "📦 Usando caché local con ordenamiento '" + sortBy + "': " +
+                localReviews.size() + " reseñas");
         callback.onLocalData(localReviews);
     }
-    
+
     /**
      * Sincronizar todas las reseñas pendientes
      */
@@ -246,64 +281,63 @@ public class ReviewRepository {
             callback.onError("Sin conexión o sin autenticación");
             return;
         }
-        
+
         List<ReviewEntity> pendingReviews = database.reviewDao().getPendingReviews();
         Log.d(TAG, "🔄 Sincronizando " + pendingReviews.size() + " reseñas pendientes");
-        
+
         if (pendingReviews.isEmpty()) {
             callback.onComplete(0, 0);
             return;
         }
-        
+
         // Contador para tracking
         final int[] syncedCount = {0};
         final int[] errorCount = {0};
         final int totalReviews = pendingReviews.size();
-        
+
         for (ReviewEntity review : pendingReviews) {
-            File photoFile = review.getPhotoPath() != null ? 
-                           new File(review.getPhotoPath()) : null;
-            
+            File photoFile = review.getPhotoPath() != null ?
+                    new File(review.getPhotoPath()) : null;
+
             sendReviewToBackend(
-                review.getUserId(),
-                review.getPlaceId(),
-                review.getDescription(),
-                review.getRating(),
-                review.getUserLatitude(),
-                review.getUserLongitude(),
-                photoFile,
-                review,
-                new ReviewCallback() {
-                    @Override
-                    public void onSuccess(String message) {
-                        syncedCount[0]++;
-                        checkSyncComplete();
-                    }
-                    
-                    @Override
-                    public void onSavedOffline(String message) {
-                        errorCount[0]++;
-                        checkSyncComplete();
-                    }
-                    
-                    @Override
-                    public void onError(String error) {
-                        errorCount[0]++;
-                        checkSyncComplete();
-                    }
-                    
-                    private void checkSyncComplete() {
-                        if (syncedCount[0] + errorCount[0] == totalReviews) {
-                            callback.onComplete(syncedCount[0], errorCount[0]);
+                    review.getUserId(),
+                    review.getPlaceId(),
+                    review.getDescription(),
+                    review.getRating(),
+                    review.getUserLatitude(),
+                    review.getUserLongitude(),
+                    photoFile,
+                    review,
+                    new ReviewCallback() {
+                        @Override
+                        public void onSuccess(String message) {
+                            syncedCount[0]++;
+                            checkSyncComplete();
+                        }
+
+                        @Override
+                        public void onSavedOffline(String message) {
+                            errorCount[0]++;
+                            checkSyncComplete();
+                        }
+
+                        @Override
+                        public void onError(String error) {
+                            errorCount[0]++;
+                            checkSyncComplete();
+                        }
+
+                        private void checkSyncComplete() {
+                            if (syncedCount[0] + errorCount[0] == totalReviews) {
+                                callback.onComplete(syncedCount[0], errorCount[0]);
+                            }
                         }
                     }
-                }
             );
         }
     }
-    
+
     public int getPendingReviewsCount() {
         return database.reviewDao().getPendingReviewsCount();
     }
-
 }

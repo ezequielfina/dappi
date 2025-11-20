@@ -46,4 +46,5 @@ public class ReviewResponse {
     public List<PhotoResponse> getPhotos() { return photos; }
     public String getCreatedAt() { return createdAt; }
     public Integer getReviewVotes() { return reviewVotes; }
+
 }

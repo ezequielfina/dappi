@@ -40,9 +40,10 @@ import data.network.ApiClient;
 import data.network.NetworkManager;
 import data.repository.ReviewRepository;
 import data.repository.callback.ReviewCallback;
+import data.session.SessionManager;  // Agregado para obtener userId y token
 
 public class Review extends AppCompatActivity {
-    
+
     private static final String TAG = "ReviewActivity";
     private static final int REQUEST_CAMERA_PERMISSION = 100;
     private static final int REQUEST_LOCATION_PERMISSION = 101;
@@ -70,12 +71,13 @@ public class Review extends AppCompatActivity {
     private ApiClient apiClient;
     private ReviewRepository reviewRepository;
     private NetworkManager networkManager;
+    private SessionManager sessionManager;  // Agregado para obtener userId y token
 
-    // Place data (esto debería venir del intent en una versión completa)
-    private long placeId = 1; // Hardcoded por ahora
-    private long userId = 1; // Hardcoded por ahora - debería venir de SharedPreferences o sesión
-    private double placeLatitude = -7.9425; // Mount Bromo
-    private double placeLongitude = 112.9533;
+    // Place data (ahora dinámico desde Intent)
+    private long placeId;
+    private long userId;
+    private double placeLatitude;
+    private double placeLongitude;
 
     private ActivityResultLauncher<Intent> takePictureLauncher;
 
@@ -84,11 +86,35 @@ public class Review extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_review);
 
+        // Obtener datos del Intent (de Place.java)
+        Intent intent = getIntent();
+        placeId = intent.getLongExtra("place_id", -1);  // Obtener placeId dinámicamente
+        placeLatitude = intent.getDoubleExtra("place_latitude", 0);
+        placeLongitude = intent.getDoubleExtra("place_longitude", 0);
+
+        if (placeId == -1) {
+            Toast.makeText(this, "❌ Error: No se especificó el lugar", Toast.LENGTH_SHORT).show();
+            finish();
+            return;
+        }
+
         initializeViews();
         setupLocationClient();
         setupPhotoLauncher();
+
+        // Inicializar SessionManager y obtener userId/token
+        sessionManager = SessionManager.getInstance(this);
+
+        String token = sessionManager.getToken();  // Obtener userId dinámicamente
+        if (token == null || token.isEmpty()) {
+            Toast.makeText(this, "❌ Error: Usuario no logueado", Toast.LENGTH_SHORT).show();
+            finish();
+            return;
+        }
+
         apiClient = new ApiClient();
         reviewRepository = ReviewRepository.getInstance(this);
+        reviewRepository.setAuthToken(sessionManager.getToken());  // Configurar token para autenticación en el backend
         networkManager = NetworkManager.getInstance(this);
         checkPermissionsAndValidateLocation();
         setupClickListeners();
@@ -132,7 +158,7 @@ public class Review extends AppCompatActivity {
 
     private void setupClickListeners() {
         backButton.setOnClickListener(v -> finish());
-        
+
         cancelButton.setOnClickListener(v -> finish());
 
         takePhotoButton.setOnClickListener(v -> {
@@ -150,7 +176,7 @@ public class Review extends AppCompatActivity {
         // MODO DEMO: Simplemente obtener ubicación sin validar
         // El botón ENVIAR siempre está habilitado
         submitButton.setEnabled(true);
-        
+
         if (checkLocationPermission()) {
             getLocationForDemo();
         } else {
@@ -160,7 +186,7 @@ public class Review extends AppCompatActivity {
             locationStatus.setText("ℹ️ Modo Demo - Sin validación de ubicación");
         }
     }
-    
+
     private void updateConnectionStatus() {
         if (networkManager.isConnected()) {
             locationStatus.setText("🟢 Online - Reseñas se sincronizan automáticamente");
@@ -198,12 +224,12 @@ public class Review extends AppCompatActivity {
                     if (location != null) {
                         userLatitude = location.getLatitude();
                         userLongitude = location.getLongitude();
-                        
+
                         double distance = calculateDistance(
                                 userLatitude, userLongitude,
                                 placeLatitude, placeLongitude
                         );
-                        
+
                         Log.d(TAG, "Distancia al lugar: " + distance + " metros (sin validar)");
                         locationStatus.setText("ℹ️ Modo Demo - Sin validación de ubicación");
                     } else {
@@ -227,16 +253,16 @@ public class Review extends AppCompatActivity {
      */
     private double calculateDistance(double lat1, double lon1, double lat2, double lon2) {
         final int EARTH_RADIUS = 6371000; // metros
-        
+
         double dLat = Math.toRadians(lat2 - lat1);
         double dLon = Math.toRadians(lon2 - lon1);
-        
+
         double a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
                 Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2)) *
                         Math.sin(dLon / 2) * Math.sin(dLon / 2);
-        
+
         double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-        
+
         return EARTH_RADIUS * c;
     }
 
@@ -255,7 +281,7 @@ public class Review extends AppCompatActivity {
 
     private void openCamera() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        
+
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
             try {
                 photoFile = createImageFile();
@@ -349,10 +375,10 @@ public class Review extends AppCompatActivity {
     // ========== PERMISSIONS CALLBACK ==========
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, 
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        
+
         if (requestCode == REQUEST_LOCATION_PERMISSION) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 getLocationForDemo();

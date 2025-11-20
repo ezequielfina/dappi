@@ -30,5 +30,14 @@ public interface ReviewDao {
 
     @Query("SELECT COUNT(*) FROM reviews WHERE synced = 0")
     int getPendingReviewsCount();
+
+    @Query("SELECT * FROM reviews WHERE placeId = :placeId ORDER BY rating DESC")
+    List<ReviewEntity> getReviewsByPlaceOrderByRatingDesc(Long placeId);
+
+    @Query("SELECT * FROM reviews WHERE placeId = :placeId ORDER BY rating ASC")
+    List<ReviewEntity> getReviewsByPlaceOrderByRatingAsc(Long placeId);
+
+    @Query("SELECT * FROM reviews WHERE placeId = :placeId ORDER BY createdAt DESC")
+    List<ReviewEntity> getReviewsByPlaceOrderByDateDesc(Long placeId);
 }
 

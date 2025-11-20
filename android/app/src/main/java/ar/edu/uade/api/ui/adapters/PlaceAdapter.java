@@ -1,6 +1,7 @@
 package ar.edu.uade.api.ui.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,14 +12,13 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import ar.edu.uade.api.R;
+import ar.edu.uade.api.ui.places.Place;
+import ar.edu.uade.api.ui.utils.VoteManager;
 import data.api.RetrofitClient;
 import data.dto.PlaceResponse;
 import data.dto.ReviewResponse;
@@ -34,11 +34,12 @@ public class PlaceAdapter extends RecyclerView.Adapter<PlaceAdapter.PlaceViewHol
     private List<PlaceResponse> places = new ArrayList<>();
     private List<PlaceResponse> placesFiltered = new ArrayList<>(); // NUEVA LISTA FILTRADA
     private SessionManager sessionManager;
-    private Map<Long, Integer> voteStates = new HashMap<>();
+    private VoteManager voteManager;  // Agregado: instancia de VoteManager
 
     public PlaceAdapter(Context context) {
         this.context = context;
         this.sessionManager = SessionManager.getInstance(context);
+        this.voteManager = VoteManager.getInstance(context);  // Inicializar VoteManager
     }
 
     @NonNull
@@ -51,7 +52,7 @@ public class PlaceAdapter extends RecyclerView.Adapter<PlaceAdapter.PlaceViewHol
 
     @Override
     public void onBindViewHolder(@NonNull PlaceViewHolder holder, int position) {
-        PlaceResponse place = placesFiltered.get(position); // USAR LA LISTA FILTRADA
+        PlaceResponse place = placesFiltered.get(position);
 
         holder.tvPlaceName.setText(place.getName());
         holder.tvPlaceLocation.setText(place.getFullAddress());
@@ -59,6 +60,20 @@ public class PlaceAdapter extends RecyclerView.Adapter<PlaceAdapter.PlaceViewHol
         Glide.with(context).load(place.getUrl()).into(holder.ivPlaceImage);
 
         loadTopReviewForCard(place.getId(), holder);
+
+        holder.itemView.setOnClickListener(v -> {
+            Intent intent = new Intent(context, Place.class);
+
+            // Pasar todos los datos del lugar
+            intent.putExtra("place_id", place.getId());
+            intent.putExtra("place_name", place.getName());
+            intent.putExtra("place_description", place.getDescription());
+            intent.putExtra("place_url", place.getUrl());
+            intent.putExtra("place_latitude", place.getLatitude());
+            intent.putExtra("place_longitude", place.getLongitude());
+
+            context.startActivity(intent);
+        });
     }
 
     @Override
@@ -131,11 +146,10 @@ public class PlaceAdapter extends RecyclerView.Adapter<PlaceAdapter.PlaceViewHol
 
                     holder.tvTopReviewDescription.setText(review.getDescription());
                     holder.tvTopReviewRating.setText("⭐ " + review.getRateToPlace() + "/5");
-                    holder.tvTopReviewVotes.setText("👍 " + review.getReviewVotes() + " votos");
                     holder.tvVoteCount.setText(String.valueOf(review.getReviewVotes()));
 
-                    updateVoteButtonsUI(holder, review.getId());
                     setupVoteButtons(holder, review);
+                    voteManager.updateVoteButtonsUI(holder, review.getId());  // Actualizar UI inicial con VoteManager
 
                     Log.d(TAG, "Top review loaded for place " + placeId);
                 } else if (response.code() == 204) {
@@ -156,122 +170,29 @@ public class PlaceAdapter extends RecyclerView.Adapter<PlaceAdapter.PlaceViewHol
     }
 
     private void setupVoteButtons(PlaceViewHolder holder, ReviewResponse review) {
-        holder.btnUpvote.setOnClickListener(v -> handleUpvote(holder, review));
-        holder.btnDownvote.setOnClickListener(v -> handleDownvote(holder, review));
+        holder.btnUpvote.setOnClickListener(v -> voteManager.handleVote(review.getId(), 1, new VoteManager.VoteCallback() {
+            @Override
+            public void onVoteSuccess(ReviewResponse updated, int newState) {
+                holder.tvVoteCount.setText(String.valueOf(updated.getReviewVotes()));
+
+                voteManager.updateVoteButtonsUI(holder, review.getId());
+                Toast.makeText(context, "¡Voto positivo registrado!", Toast.LENGTH_SHORT).show();
+            }
+        }));
+        holder.btnDownvote.setOnClickListener(v -> voteManager.handleVote(review.getId(), -1, new VoteManager.VoteCallback() {
+            @Override
+            public void onVoteSuccess(ReviewResponse updated, int newState) {
+                holder.tvVoteCount.setText(String.valueOf(updated.getReviewVotes()));
+
+                voteManager.updateVoteButtonsUI(holder, review.getId());
+                Toast.makeText(context, "Voto negativo registrado", Toast.LENGTH_SHORT).show();
+            }
+        }));
     }
 
-    private void handleUpvote(PlaceViewHolder holder, ReviewResponse review) {
-        String token = sessionManager.getToken();
+    // QUITADO: handleUpvote, handleDownvote, updateVoteButtonsUI (ahora en VoteManager)
 
-        if (token == null || token.isEmpty()) {
-            Toast.makeText(context, "Token no disponible", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        holder.btnUpvote.setEnabled(false);
-        holder.btnDownvote.setEnabled(false);
-
-        Call<ReviewResponse> call = RetrofitClient.getReviewApi(token).upVoteReview(review.getId());
-
-        call.enqueue(new Callback<ReviewResponse>() {
-            @Override
-            public void onResponse(Call<ReviewResponse> call, Response<ReviewResponse> response) {
-                holder.btnUpvote.setEnabled(true);
-                holder.btnDownvote.setEnabled(true);
-
-                if (response.isSuccessful() && response.body() != null) {
-                    ReviewResponse updatedReview = response.body();
-
-                    holder.tvVoteCount.setText(String.valueOf(updatedReview.getReviewVotes()));
-                    holder.tvTopReviewVotes.setText("👍 " + updatedReview.getReviewVotes() + " votos");
-
-                    voteStates.put(review.getId(), 1);
-                    updateVoteButtonsUI(holder, review.getId());
-
-                    Toast.makeText(context, "¡Voto positivo registrado!", Toast.LENGTH_SHORT).show();
-                } else if (response.code() == 400) {
-                    Toast.makeText(context, "Ya votaste positivamente esta review", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(context, "Error al votar", Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ReviewResponse> call, Throwable t) {
-                holder.btnUpvote.setEnabled(true);
-                holder.btnDownvote.setEnabled(true);
-                Log.e(TAG, "Error upvoting: " + t.getMessage());
-                Toast.makeText(context, "Error de conexión", Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-
-    private void handleDownvote(PlaceViewHolder holder, ReviewResponse review) {
-        String token = sessionManager.getToken();
-
-        if (token == null || token.isEmpty()) {
-            Toast.makeText(context, "Token no disponible", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        holder.btnUpvote.setEnabled(false);
-        holder.btnDownvote.setEnabled(false);
-
-        Call<ReviewResponse> call = RetrofitClient.getReviewApi(token).downVoteReview(review.getId());
-
-        call.enqueue(new Callback<ReviewResponse>() {
-            @Override
-            public void onResponse(Call<ReviewResponse> call, Response<ReviewResponse> response) {
-                holder.btnUpvote.setEnabled(true);
-                holder.btnDownvote.setEnabled(true);
-
-                if (response.isSuccessful() && response.body() != null) {
-                    ReviewResponse updatedReview = response.body();
-
-                    holder.tvVoteCount.setText(String.valueOf(updatedReview.getReviewVotes()));
-                    holder.tvTopReviewVotes.setText("👍 " + updatedReview.getReviewVotes() + " votos");
-
-                    voteStates.put(review.getId(), -1);
-                    updateVoteButtonsUI(holder, review.getId());
-
-                    Toast.makeText(context, "Voto negativo registrado", Toast.LENGTH_SHORT).show();
-                } else if (response.code() == 400) {
-                    Toast.makeText(context, "Ya votaste negativamente esta review", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(context, "Error al votar", Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ReviewResponse> call, Throwable t) {
-                holder.btnUpvote.setEnabled(true);
-                holder.btnDownvote.setEnabled(true);
-                Log.e(TAG, "Error downvoting: " + t.getMessage());
-                Toast.makeText(context, "Error de conexión", Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-
-    private void updateVoteButtonsUI(PlaceViewHolder holder, Long reviewId) {
-        Integer voteState = voteStates.get(reviewId);
-        if (voteState == null) voteState = 0;
-
-        int blueColor = ContextCompat.getColor(context, android.R.color.holo_blue_light);
-        int grayColor = ContextCompat.getColor(context, android.R.color.darker_gray);
-
-        if (voteState == 1) {
-            holder.tvUpvoteIcon.setTextColor(blueColor);
-            holder.tvDownvoteIcon.setTextColor(grayColor);
-        } else if (voteState == -1) {
-            holder.tvUpvoteIcon.setTextColor(grayColor);
-            holder.tvDownvoteIcon.setTextColor(blueColor);
-        } else {
-            holder.tvUpvoteIcon.setTextColor(grayColor);
-            holder.tvDownvoteIcon.setTextColor(grayColor);
-        }
-    }
-
-    static class PlaceViewHolder extends RecyclerView.ViewHolder {
+    static class PlaceViewHolder extends RecyclerView.ViewHolder implements VoteManager.VoteUIHolder {
         ImageView ivPlaceImage;
         TextView tvPlaceName;
         TextView tvPlaceLocation;
@@ -306,5 +227,14 @@ public class PlaceAdapter extends RecyclerView.Adapter<PlaceAdapter.PlaceViewHol
             tvDownvoteIcon = itemView.findViewById(R.id.tvDownvoteIcon);
             tvVoteCount = itemView.findViewById(R.id.tvVoteCount);
         }
+
+        @Override
+        public TextView getTvUpvoteIcon() { return tvUpvoteIcon; }
+
+        @Override
+        public TextView getTvDownvoteIcon() { return tvDownvoteIcon; }
+
+        @Override
+        public TextView getTvVoteCount() { return tvVoteCount; }
     }
 }

@@ -14,6 +14,7 @@ import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 public interface ReviewApi {
 
@@ -37,8 +38,11 @@ public interface ReviewApi {
     /**
      * Obtener reviews de un lugar
      */
-    @GET("reviews/place/{placeId}")
-    Call<List<ReviewResponse>> getReviewsByPlace(@Path("placeId") Long placeId);
+    @GET("reviews/places/{placeId}")
+    Call<List<ReviewResponse>> getReviewsByPlace(
+            @Path("placeId") Long placeId,
+            @Query("sortBy") String sortBy
+    );
 
     @GET("reviews/places/{placeId}/top")
     Call<ReviewResponse> getTopReviewByPlace(@Path("placeId") Long placeId);

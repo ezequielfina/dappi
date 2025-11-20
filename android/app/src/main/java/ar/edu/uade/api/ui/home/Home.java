@@ -38,7 +38,7 @@ public class Home extends AppCompatActivity {
     private SessionManager sessionManager;
     private ImageView profilePhoto;
     private TextView tvGreeting;
-    private EditText searchView; // NUEVO
+    private EditText searchView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +47,7 @@ public class Home extends AppCompatActivity {
 
         sessionManager = SessionManager.getInstance(this);
         initializeViews();
-        setupSearchView(); // NUEVO
+        setupSearchView();
         loadUserProfile();
         setupRecyclerView();
         loadPlaces();
@@ -58,6 +58,9 @@ public class Home extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         loadUserProfile();
+        if (placeAdapter != null) {
+            placeAdapter.notifyDataSetChanged();
+        }
     }
 
     private void initializeViews() {
