@@ -36,7 +36,7 @@ public class ProfileActivity extends AppCompatActivity {
     private static final String TAG = "ProfileActivity";
     private ActivityProfileBinding binding;
     private SessionManager sessionManager;
-    private UserRepository userRepository; // Nuevo: Referencia al Repositorio
+    private UserRepository userRepository;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +56,7 @@ public class ProfileActivity extends AppCompatActivity {
         setSupportActionBar(binding.topAppBar);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
         }
 
         // ... (Tu lógica existente para Favoritos, Banderas, y Bottom Nav) ...

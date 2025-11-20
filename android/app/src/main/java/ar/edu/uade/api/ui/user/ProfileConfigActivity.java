@@ -16,6 +16,7 @@ public class ProfileConfigActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
         }
 
         toolbar.setNavigationOnClickListener(v -> onBackPressed());

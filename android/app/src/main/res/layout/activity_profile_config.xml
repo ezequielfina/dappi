@@ -21,6 +21,7 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="@color/background_dark"
+            app:title=""
             app:navigationIcon="@drawable/arrow_back"
             app:navigationIconTint="@color/text_primary"
             app:theme="@style/ToolbarOverlay.Dark" />
