@@ -5,18 +5,24 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import ar.edu.uade.api.R;
+import ar.edu.uade.api.ui.utils.ImageUtils;
 import ar.edu.uade.api.ui.utils.VoteManager;
 import data.api.RetrofitClient;
+import data.dto.PhotoResponse;
 import data.dto.ReviewResponse;
 import data.session.SessionManager;
 import retrofit2.Call;
@@ -65,8 +71,34 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewView
         holder.tvRating.setText(review.getRateToPlace() + " ⭐");
         holder.tvVoteCount.setText(String.valueOf(review.getReviewVotes()));
 
+        if (review.getPhotos() != null && !review.getPhotos().isEmpty()) {
+            PhotoResponse photo = review.getPhotos().get(0);
+            String imageUrl = photo.getImageUrl();
+            
+            if (imageUrl != null && !imageUrl.isEmpty()) {
+                holder.ivReviewPhoto.setVisibility(View.VISIBLE);
+                Object imageSource = ImageUtils.getImageSource(imageUrl);
+                
+                if (imageSource != null) {
+                    Glide.with(context)
+                            .load(imageSource)
+                            .diskCacheStrategy(DiskCacheStrategy.NONE)
+                            .skipMemoryCache(true)
+                            .placeholder(R.color.card_background_dark)
+                            .error(R.color.card_background_dark)
+                            .into(holder.ivReviewPhoto);
+                } else {
+                    holder.ivReviewPhoto.setVisibility(View.GONE);
+                }
+            } else {
+                holder.ivReviewPhoto.setVisibility(View.GONE);
+            }
+        } else {
+            holder.ivReviewPhoto.setVisibility(View.GONE);
+        }
+
         setupVoteButtons(holder, review);
-        voteManager.updateVoteButtonsUI(holder, review.getId());  // Actualizar UI con estados persistentes
+        voteManager.updateVoteButtonsUI(holder, review.getId());
     }
 
     @Override
@@ -109,12 +141,14 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewView
         TextView tvDescription, tvRating, tvVoteCount;
         View btnUpvote, btnDownvote;
         TextView tvUpvoteIcon, tvDownvoteIcon;
+        ImageView ivReviewPhoto;
 
         public ReviewViewHolder(@NonNull View itemView) {
             super(itemView);
 
             tvDescription = itemView.findViewById(R.id.tvReviewDescription);
             tvRating = itemView.findViewById(R.id.tvReviewRating);
+            ivReviewPhoto = itemView.findViewById(R.id.ivReviewPhoto);
 
             btnUpvote = itemView.findViewById(R.id.btnUpvote);
             btnDownvote = itemView.findViewById(R.id.btnDownvote);
