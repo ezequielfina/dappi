@@ -9,7 +9,7 @@ import java.util.concurrent.TimeUnit;
 public class RetrofitClient {
 
     // Configuración para emulador (10.0.2.2) o dispositivo físico (IP de tu PC)
-    private static final String BASE_URL = "http://192.168.0.13:8080/api/v1/";
+    private static final String BASE_URL = "http://travel-guide.us-east-1.elasticbeanstalk.com/api/v1/";
     // private static final String BASE_URL = "http://192.168.0.13:8080/api/v1/";
 
     private static Retrofit retrofit = null;

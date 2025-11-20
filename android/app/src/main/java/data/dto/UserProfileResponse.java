@@ -16,7 +16,7 @@ public class UserProfileResponse {
     private int resenasRealizadas;
 
     @SerializedName("upvotes")
-    private int upvotes;
+    private Integer upvotes;
 
     @SerializedName("reviewMasVotada")
     private ReviewResponse reviewMasVotada;
@@ -38,7 +38,7 @@ public class UserProfileResponse {
         return resenasRealizadas;
     }
 
-    public int getUpvotes() {
+    public Integer getUpvotes() {
         return upvotes;
     }
 
