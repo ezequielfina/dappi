@@ -50,7 +50,6 @@ public class Place {
     @Column(name = "photo", length = 2000)
     private String url;
 
-
     @Column(name = "place_category")
     private String placeCategory;
 

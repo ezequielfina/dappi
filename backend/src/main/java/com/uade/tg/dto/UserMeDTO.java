@@ -11,6 +11,7 @@ public class UserMeDTO {
     private Long id;
     private String userName;
     private String email;
+    private String profilePictureUrl;
     private int resenasRealizadas;
     private int upvotes;
     private ReviewResponseDTO reviewMasVotada;

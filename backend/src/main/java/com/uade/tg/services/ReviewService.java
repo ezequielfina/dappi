@@ -94,7 +94,25 @@ public class ReviewService {
                 ))
                 .toList();
     }
+    public ReviewResponseDTO getTopReviewByPlace(Long placeId) {
+        List<Review> reviews = reviewRepository.findByPlaceOrdered(placeId);
 
+        if (reviews.isEmpty()) {
+            return null;
+        }
+
+        Review topReview = reviews.get(0);
+
+        return ReviewResponseDTO.builder()
+                .id(topReview.getId())
+                .description(topReview.getDescription())
+                .rateToPlace(topReview.getRateToPlace())
+                .reviewVotes(topReview.getReviewVotes())
+                .userId(topReview.getUser().getId())
+                .placeId(topReview.getPlace().getId())
+                .photoUrl(topReview.getPhotoUrl())
+                .build();
+    }
     public ReviewResponseDTO upVoteReview(Long userId, Long reviewId) {
         Review review = reviewRepository.findById(reviewId)
                 .orElseThrow(() -> new RuntimeException("Review no encontrada"));

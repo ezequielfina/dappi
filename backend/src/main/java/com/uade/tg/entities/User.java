@@ -44,7 +44,7 @@ public class User implements UserDetails {
     private String favoritePlace;
 
     @Column(columnDefinition = "TEXT")
-    private String profilePicture;
+    private String profilePictureUrl;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

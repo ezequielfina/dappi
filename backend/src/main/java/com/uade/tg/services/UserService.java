@@ -59,6 +59,7 @@ public class UserService {
                 .email(user.getEmail())
                 .userName(user.getUserName())
                 .resenasRealizadas(cantResenas)
+                .profilePictureUrl(user.getProfilePictureUrl())
                 // Si reviewResponseDTO es null, se establece como null aquí
                 .reviewMasVotada(reviewResponseDTO)
                 .build();
@@ -69,7 +70,7 @@ public class UserService {
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
         user.setCountry(req.getCountry());
         user.setFavoritePlace(req.getFavoritePlace());
-        user.setProfilePicture(req.getProfileImageUrl());
+        user.setProfilePictureUrl(req.getProfileImageUrl());
 
         userRepository.save(user);
         return Optional.of(user);
@@ -89,7 +90,7 @@ public class UserService {
             user.setPassword(request.getPassword());
         }
         if (request.getProfilePicture() != null && !request.getProfilePicture().isEmpty()) {
-            user.setProfilePicture(request.getProfilePicture());
+            user.setProfilePictureUrl(request.getProfilePicture());
         }
         return Optional.of(userRepository.save(user));
     }

@@ -42,6 +42,15 @@ public class ReviewController {
         return ResponseEntity.ok(reviews);
     }
 
+    @GetMapping("/places/{placeId}/top")
+    public ResponseEntity<ReviewResponseDTO> getTopReviewByPlace(@PathVariable Long placeId) {
+        ReviewResponseDTO topReview = reviewService.getTopReviewByPlace(placeId);
+        if (topReview == null) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(topReview);
+    }
+
     @GetMapping("/users")
     public ResponseEntity<List<ReviewResponseDTO>>  getReviewsByUser(
             @AuthenticationPrincipal User user) {
