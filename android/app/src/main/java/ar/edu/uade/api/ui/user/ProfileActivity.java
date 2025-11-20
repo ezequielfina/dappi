@@ -23,6 +23,7 @@ import ar.edu.uade.api.R;
 import ar.edu.uade.api.databinding.ActivityProfileBinding;
 import ar.edu.uade.api.ui.home.Home;
 import ar.edu.uade.api.ui.map.MapActivity;
+import ar.edu.uade.api.ui.utils.ImageUtils;
 import data.dto.UserProfileResponse;
 import data.repository.UserRepository;
 import data.repository.callback.UserCallback;
@@ -167,14 +168,20 @@ public class ProfileActivity extends AppCompatActivity {
         if (binding.ivProfilePhoto == null) return;
 
         if (profilePictureUrl != null && !profilePictureUrl.isEmpty()) {
-            Glide.with(this)
-                    .load(profilePictureUrl)
-                    .diskCacheStrategy(DiskCacheStrategy.NONE)
-                    .skipMemoryCache(true)
-                    .placeholder(R.drawable.ic_avatar_placeholder)
-                    .error(R.drawable.ic_avatar_placeholder)
-                    .circleCrop()
-                    .into(binding.ivProfilePhoto);
+            Object imageSource = ImageUtils.getImageSource(profilePictureUrl);
+            
+            if (imageSource != null) {
+                Glide.with(this)
+                        .load(imageSource)
+                        .diskCacheStrategy(DiskCacheStrategy.NONE)
+                        .skipMemoryCache(true)
+                        .placeholder(R.drawable.ic_avatar_placeholder)
+                        .error(R.drawable.ic_avatar_placeholder)
+                        .circleCrop()
+                        .into(binding.ivProfilePhoto);
+            } else {
+                binding.ivProfilePhoto.setImageResource(R.drawable.ic_avatar_placeholder);
+            }
         } else {
             binding.ivProfilePhoto.setImageResource(R.drawable.ic_avatar_placeholder);
         }

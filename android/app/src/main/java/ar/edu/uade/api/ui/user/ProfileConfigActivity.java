@@ -19,6 +19,7 @@ import java.io.InputStream;
 
 import ar.edu.uade.api.R;
 import ar.edu.uade.api.databinding.ActivityProfileConfigBinding;
+import ar.edu.uade.api.ui.utils.ImageUtils;
 import data.dto.UserProfileResponse;
 import data.repository.UserRepository;
 import data.repository.callback.UserCallback;
@@ -105,14 +106,20 @@ public class ProfileConfigActivity extends AppCompatActivity {
 
     private void loadProfileImage(String url) {
         if (url != null && !url.isEmpty()) {
-            Glide.with(this)
-                    .load(url)
-                    .diskCacheStrategy(DiskCacheStrategy.NONE)
-                    .skipMemoryCache(true)
-                    .placeholder(R.mipmap.avatar_foreground)
-                    .error(R.mipmap.avatar_foreground)
-                    .circleCrop()
-                    .into(binding.imgProfile);
+            Object imageSource = ImageUtils.getImageSource(url);
+            
+            if (imageSource != null) {
+                Glide.with(this)
+                        .load(imageSource)
+                        .diskCacheStrategy(DiskCacheStrategy.NONE)
+                        .skipMemoryCache(true)
+                        .placeholder(R.mipmap.avatar_foreground)
+                        .error(R.mipmap.avatar_foreground)
+                        .circleCrop()
+                        .into(binding.imgProfile);
+            } else {
+                binding.imgProfile.setImageResource(R.mipmap.avatar_foreground);
+            }
         } else {
             binding.imgProfile.setImageResource(R.mipmap.avatar_foreground);
         }

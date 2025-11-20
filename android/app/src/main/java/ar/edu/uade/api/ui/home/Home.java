@@ -21,6 +21,7 @@ import java.util.List;
 import ar.edu.uade.api.R;
 import ar.edu.uade.api.ui.adapters.PlaceAdapter;
 import ar.edu.uade.api.ui.user.ProfileActivity;
+import ar.edu.uade.api.ui.utils.ImageUtils;
 import data.api.RetrofitClient;
 import data.dto.PlaceResponse;
 import data.dto.UserProfileResponse;
@@ -256,16 +257,23 @@ public class Home extends AppCompatActivity {
             return;
         }
         if (profilePictureUrl != null && !profilePictureUrl.isEmpty()) {
-            Log.d(TAG, "Loading profile image from: " + profilePictureUrl);
+            Log.d(TAG, "Loading profile image from: " + profilePictureUrl.substring(0, Math.min(50, profilePictureUrl.length())) + "...");
 
-            Glide.with(this)
-                    .load(profilePictureUrl)
-                    .diskCacheStrategy(DiskCacheStrategy.NONE)
-                    .skipMemoryCache(true)
-                    .placeholder(R.drawable.ic_avatar_placeholder)
-                    .error(R.drawable.ic_avatar_placeholder)
-                    .circleCrop()
-                    .into(profilePhoto);
+            Object imageSource = ImageUtils.getImageSource(profilePictureUrl);
+            
+            if (imageSource != null) {
+                Glide.with(this)
+                        .load(imageSource)
+                        .diskCacheStrategy(DiskCacheStrategy.NONE)
+                        .skipMemoryCache(true)
+                        .placeholder(R.drawable.ic_avatar_placeholder)
+                        .error(R.drawable.ic_avatar_placeholder)
+                        .circleCrop()
+                        .into(profilePhoto);
+            } else {
+                Log.e(TAG, "Failed to load image source");
+                profilePhoto.setImageResource(R.drawable.ic_avatar_placeholder);
+            }
         } else {
             Log.d(TAG, "No profile picture URL, using placeholder");
             profilePhoto.setImageResource(R.drawable.ic_avatar_placeholder);
