@@ -40,9 +40,18 @@ public interface ReviewApi {
     @GET("reviews/place/{placeId}")
     Call<List<ReviewResponse>> getReviewsByPlace(@Path("placeId") Long placeId);
 
+    @GET("reviews/places/{placeId}/top")
+    Call<ReviewResponse> getTopReviewByPlace(@Path("placeId") Long placeId);
+
     /**
      * Obtener reviews del usuario actual
      */
     @GET("reviews/user/me")
     Call<List<ReviewResponse>> getMyReviews();
+
+    @POST("reviews/{reviewId}/votes/up")
+    Call<ReviewResponse> upVoteReview(@Path("reviewId") Long reviewId);
+
+    @POST("reviews/{reviewId}/votes/down")
+    Call<ReviewResponse> downVoteReview(@Path("reviewId") Long reviewId);
 }

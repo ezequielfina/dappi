@@ -11,6 +11,9 @@ public class SessionManager {
     private static final String KEY_USER_ID = "user_id";
     private static final String KEY_USERNAME = "username";
     private static final String KEY_EMAIL = "user_email";
+    private static final String KEY_PROFILE_PICTURE_URL = "profile_picture_url";
+    private static final String KEY_REVIEWS_COUNT = "reviews_count";
+    private static final String KEY_UPVOTES = "upvotes";
     private static final String KEY_IS_LOGGED_IN = "is_logged_in";
 
     private static SessionManager instance;
@@ -38,12 +41,34 @@ public class SessionManager {
         editor.putBoolean(KEY_IS_LOGGED_IN, true);
         editor.apply();
 
-        Log.d(TAG, "✅ Sesión guardada - User: " + username);
+        Log.d(TAG, "Sesión guardada - User: " + username);
+    }
+
+    // Nuevo método para guardar perfil completo
+    public void saveUserProfile(String username, String email, String profilePictureUrl,
+                                int reviewsCount, int upvotes) {
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString(KEY_USERNAME, username);
+        editor.putString(KEY_EMAIL, email);
+        editor.putString(KEY_PROFILE_PICTURE_URL, profilePictureUrl);
+        editor.putInt(KEY_REVIEWS_COUNT, reviewsCount);
+        editor.putInt(KEY_UPVOTES, upvotes);
+        editor.apply();
+
+        Log.d(TAG, "Perfil actualizado - User: " + username);
+    }
+
+    // Método para actualizar solo la foto de perfil
+    public void updateProfilePicture(String profilePictureUrl) {
+        prefs.edit()
+                .putString(KEY_PROFILE_PICTURE_URL, profilePictureUrl)
+                .apply();
+        Log.d(TAG, "Foto de perfil actualizada");
     }
 
     public void clearSession() {
         prefs.edit().clear().apply();
-        Log.d(TAG, "🔒 Sesión cerrada");
+        Log.d(TAG, "Sesión cerrada");
     }
 
     public String getToken() {
@@ -61,6 +86,18 @@ public class SessionManager {
 
     public String getEmail() {
         return prefs.getString(KEY_EMAIL, null);
+    }
+
+    public String getProfilePictureUrl() {
+        return prefs.getString(KEY_PROFILE_PICTURE_URL, null);
+    }
+
+    public int getReviewsCount() {
+        return prefs.getInt(KEY_REVIEWS_COUNT, 0);
+    }
+
+    public int getUpvotes() {
+        return prefs.getInt(KEY_UPVOTES, 0);
     }
 
     public boolean isLoggedIn() {

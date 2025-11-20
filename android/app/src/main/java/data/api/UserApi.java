@@ -1,7 +1,7 @@
 package data.api;
 
 import data.dto.UpdateProfileRequest;
-import data.dto.UserNameResponse;
+import data.dto.UserProfileResponse;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
@@ -16,5 +16,5 @@ public interface UserApi {
     Call<Void> updateProfile(@Body UpdateProfileRequest request);
 
     @GET("users/me")
-    Call<UserNameResponse> getMyUserName();
+    Call<UserProfileResponse> getMyProfile();
 }

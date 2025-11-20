@@ -29,6 +29,9 @@ public class ReviewResponse {
     @SerializedName("photos")
     private List<PhotoResponse> photos;
 
+    @SerializedName("reviewVotes")
+    private Integer reviewVotes;
+
     @SerializedName("createdAt")
     private String createdAt;
 
@@ -42,4 +45,5 @@ public class ReviewResponse {
     public Double getUserLongitude() { return userLongitude; }
     public List<PhotoResponse> getPhotos() { return photos; }
     public String getCreatedAt() { return createdAt; }
+    public Integer getReviewVotes() { return reviewVotes; }
 }
