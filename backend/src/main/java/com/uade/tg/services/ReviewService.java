@@ -43,6 +43,7 @@ public class ReviewService {
         return ReviewResponseDTO.builder()
                 .id(review.getId())
                 .description(review.getDescription())
+                .rateToPlace(review.getRateToPlace())
                 .reviewVotes(review.getReviewVotes())
                 .build();
     }
