@@ -27,8 +27,16 @@ public class UserController {
 
 
     @GetMapping("/me")
-    public ResponseEntity<User> getMyProfile(@AuthenticationPrincipal User user) {
-        return ResponseEntity.ok(user);
+    public ResponseEntity<UserMeDTO> getMyProfile(@AuthenticationPrincipal User user) {
+        UserMeDTO userDTO = UserMeDTO.builder()
+                .id(user.getId())
+                .userName(user.getUserName())
+                .email(user.getEmail())
+                .country(user.getCountry())
+                .favoritePlace(user.getFavoritePlace())
+                .profilePicture(user.getProfilePicture())
+                .build();
+        return ResponseEntity.ok(userDTO);
     }
 
     @PutMapping("/me/update")
@@ -43,14 +51,6 @@ public class UserController {
             @AuthenticationPrincipal User user,
             @RequestBody FirstRegisterDTO request) {
         return ResponseEntity.ok(userService.onBoardingPage(user.getId(),request));
-    }
-
-    @GetMapping("/me")
-    public ResponseEntity<UserMeDTO> getProfile(@AuthenticationPrincipal User user) {
-        System.out.println("1");
-        UserMeDTO dbUser = userService.findUserDtoByEmail(user.getEmail());
-
-        return ResponseEntity.ok(dbUser);
     }
 
 
