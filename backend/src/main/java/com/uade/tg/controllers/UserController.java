@@ -26,6 +26,11 @@ public class UserController {
     }
 
 
+    @GetMapping("/me")
+    public ResponseEntity<User> getMyProfile(@AuthenticationPrincipal User user) {
+        return ResponseEntity.ok(user);
+    }
+
     @PutMapping("/me/update")
     public ResponseEntity<Optional<User>> updateProfile(
             @AuthenticationPrincipal User user,
